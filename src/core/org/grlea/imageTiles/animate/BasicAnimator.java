@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.animate;
 
-// $Id: BasicAnimator.java,v 1.1 2004-08-23 22:47:39 grlea Exp $
+// $Id: BasicAnimator.java,v 1.2 2004-08-27 01:08:09 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ import java.awt.Graphics2D;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 BasicAnimator
@@ -37,7 +37,7 @@ extends AbstractAnimator
    {}
 
    public void
-   tick(RenderedTileSource tileSource)
+   advanceFrame(RenderedTileSource tileSource)
    {
       if (tileSource.hasMoreTiles())
       {
@@ -51,9 +51,15 @@ extends AbstractAnimator
    }
 
    public void
-   paint(Graphics2D graphics)
+   render(Graphics2D graphics)
    {
       if (nextTile != null)
          nextTile.paint(graphics);
+   }
+
+   public void
+   reset()
+   {
+      nextTile = null;
    }
 }

@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.animate;
 
-// $Id: SlideAnimator.java,v 1.1 2004-08-23 22:47:39 grlea Exp $
+// $Id: SlideAnimator.java,v 1.2 2004-08-27 01:08:10 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +32,7 @@ import java.util.Random;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 SlideAnimator
@@ -74,7 +74,7 @@ extends AbstractAnimator
    }
 
    public void
-   tick(RenderedTileSource tileSource)
+   advanceFrame(RenderedTileSource tileSource)
    {
       for (Iterator iter = tileSliders.iterator(); iter.hasNext();)
       {
@@ -118,12 +118,18 @@ extends AbstractAnimator
    }
 
    public void
-   paint(Graphics2D graphics)
+   render(Graphics2D graphics)
    {
       for (Iterator iter = tileSliders.iterator(); iter.hasNext();)
       {
          ((TileSlider) iter.next()).paint(graphics);
       }
+   }
+
+   public void
+   reset()
+   {
+      tileSliders.clear();
    }
 
    private final class
