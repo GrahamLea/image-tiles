@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.render;
 
-// $Id: BevelEdgeDecorator.java,v 1.1 2004-08-20 05:25:41 grlea Exp $
+// $Id: BevelEdgeDecorator.java,v 1.2 2004-08-23 04:59:27 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,8 @@ package org.grlea.imageTiles.render;
 
 import org.grlea.imageTiles.TileSpace;
 
-import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Composite;
 import java.awt.Graphics2D;
 import java.awt.Paint;
 import java.awt.Stroke;
@@ -31,7 +29,7 @@ import java.awt.image.BufferedImage;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 BevelEdgeDecorator
@@ -39,8 +37,8 @@ implements Decorator
 {
    private static final float DEFAULT_BORDER_ALPHA = 0.4F;
 
-   private final AlphaComposite alphaComposite;
-
+   private final Color highlightColour;
+   private final Color shadowColour;
    private final Stroke lineType;
 
    private final Line2D[] whiteLines;
@@ -55,18 +53,21 @@ implements Decorator
    public
    BevelEdgeDecorator(TileSpace tileSpace, float alpha)
    {
-      this.alphaComposite = AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, alpha);
       lineType = new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER);
 
       int tileSize = tileSpace.getTileSize();
       int lastPixel = tileSize - 1;
 
+      // TODO (grahaml) Implement variable thickness, which will change these line arrays.
       this.whiteLines =
          new Line2D[] {new Line2D.Double(0, 0, lastPixel, 0),
                        new Line2D.Double(0, 0, 0, lastPixel)};
       this.blackLines =
          new Line2D[] {new Line2D.Double(lastPixel, 0, lastPixel, lastPixel),
                        new Line2D.Double(0, lastPixel, lastPixel, lastPixel)};
+
+      this.highlightColour = new Color(1, 1, 1, alpha);
+      this.shadowColour = new Color(0, 0, 0, alpha);
    }
 
    public void
@@ -74,24 +75,21 @@ implements Decorator
    {
       Graphics2D graphics = (Graphics2D) tileImage.getGraphics();
 
-      Composite originalComposite = graphics.getComposite();
       Paint originalPaint = graphics.getPaint();
-      graphics.setComposite(alphaComposite);
       graphics.setStroke(lineType);
 
-      graphics.setPaint(Color.white);
+      graphics.setPaint(highlightColour);
       for (int i = 0; i < whiteLines.length; i++)
       {
          graphics.draw(whiteLines[i]);
       }
 
-      graphics.setPaint(Color.black);
+      graphics.setPaint(shadowColour);
       for (int i = 0; i < blackLines.length; i++)
       {
          graphics.draw(blackLines[i]);
       }
 
-      graphics.setComposite(originalComposite);
       graphics.setPaint(originalPaint);
    }
 }
