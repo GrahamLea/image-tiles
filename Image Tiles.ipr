@@ -3,7 +3,7 @@
   <component name="ProjectRootManager" version="2">
     <jdk name="java version &quot;1.4.2_03&quot;" />
     <library name="Explicit Layout 3.0" />
-    <library name="Pietschy Explicit Table Layout 0.1.9" />
+    <library name="Pietschy Explicit Table Layout 0.1.16" />
     <library name="JGoodies Looks 1.2.1" />
     <projectPath>
       <root type="composite">
@@ -18,7 +18,7 @@
         <root type="simple" url="file://$PROJECT_DIR$/src/core" />
         <root type="simple" url="file://$PROJECT_DIR$/src/demo" />
         <root type="simple" url="file://$PROJECT_DIR$/src/swing" />
-        <root type="library" rootType="sourcePath" name="Pietschy Explicit Table Layout 0.1.9" />
+        <root type="library" rootType="sourcePath" name="Pietschy Explicit Table Layout 0.1.16" />
       </root>
     </sourcePath>
     <classPath>
@@ -27,7 +27,7 @@
         <root type="jdk" rootType="classPath" name="java version &quot;1.4.2_03&quot;" />
         <root type="library" rootType="classPath" name="Explicit Layout 3.0" />
         <root type="library" rootType="classPath" name="JGoodies Looks 1.2.1" />
-        <root type="library" rootType="classPath" name="Pietschy Explicit Table Layout 0.1.9" />
+        <root type="library" rootType="classPath" name="Pietschy Explicit Table Layout 0.1.16" />
       </root>
     </classPath>
     <excludePath>
@@ -42,7 +42,7 @@
         <root type="jdk" rootType="javadocPath" name="java version &quot;1.4.2_03&quot;" />
         <root type="library" rootType="javadocPath" name="Explicit Layout 3.0" />
         <root type="library" rootType="javadocPath" name="JGoodies Looks 1.2.1" />
-        <root type="library" rootType="javadocPath" name="Pietschy Explicit Table Layout 0.1.9" />
+        <root type="library" rootType="javadocPath" name="Pietschy Explicit Table Layout 0.1.16" />
       </root>
     </javadocPath>
     <assert_keyword enabled="no" />
