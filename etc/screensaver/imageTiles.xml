@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Copyright (c) 2004 Sun Microsystems, Inc. All rights reserved. Use is
+subject to license terms.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the Lesser GNU General Public License as
+published by the Free Software Foundation; either version 2 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+USA
+-->
+
+<!--
+  - xscreensaver-style configuration file for BouncingLine screensaver.
+  -->
+<screensaver name="imageTiles" _label="Image Tiles (Java)">
+
+  <command arg="-root"/>
+
+  <command arg="-jar imageTiles-screensaver.jar"/>
+
+  <command arg="-class org.grlea.imageTiles.screensaver.ImageTilesScreensaver"/>
+
+  <file id="jdkhome" _label="Java Home (blank=auto)" arg="-jdkhome %" />
+
+   <file id="imageDirectory" _label="Image Directory" arg="-imageDirectory %" />
+
+   <boolean id="searchSubdirectories"
+              _label="Search Subdirectories"
+               arg-set="-searchSubdirectories true"
+               arg-unset="-searchSubdirectories false"
+              />
+
+   <boolean id="randomImageOrder"
+              _label="Random Image Order"
+               arg-set="-randomImageOrder true"
+               arg-unset="-randomImageOrder false"
+              />
+
+   <boolean id="startAtRandomImage"
+              _label="Start at Random Image"
+               arg-set="-startAtRandomImage true"
+               arg-unset="-startAtRandomImage false"
+              />
+
+   <number id="tileSize"
+             type="spinbutton"
+             arg="-tileSize %"
+             _label="Tile Size"
+             low="2"
+             high="100"
+             default="50"
+             />
+
+   <number id="gapSize"
+             type="spinbutton"
+             arg="-gapSize %"
+             _label="Gap Size"
+             low="0"
+             high="10"
+             default="1"
+             />
+
+   <number id="animatedTiles"
+             type="spinbutton"
+             arg="-animatedTiles %"
+             _label="No. of Animated Tiles"
+             low="1"
+             high="500"
+             default="15"
+             />
+
+   <number id="slideSpeed"
+             type="spinbutton"
+             arg="-slideSpeed %"
+             _label="Speed of Tiles (px/s)"
+             low="1"
+             high="3000"
+             default="350"
+             />
+
+   <number id="transitionInterval"
+             type="spinbutton"
+             arg="-transitionInterval %"
+             _label="Transition Interval (s)"
+             low="0"
+             high="60"
+             default="3"
+             />
+
+   <boolean id="clearImages"
+              _label="Clear Images"
+               arg-set="-clearImages true"
+               arg-unset="-clearImages false"
+              />
+
+   <number id="targetFrameRate"
+             type="spinbutton"
+             arg="-targetFrameRate %"
+             _label="Target Frame Rate (fps)"
+             low="10"
+             high="200"
+             default="50"
+             />
+
+   <select id="scaleThreshold">
+       <option id="scaleThreshold-noLimit"
+               _label="Scale Threshold: No Limit"
+               arg-set="-scaleThreshold noLimit"
+               />
+       <option id="scaleThreshold-two"
+               _label="Scale Threshold: Two"
+               />
+       <option id="scaleThreshold-noScale"
+               _label="Scale Threshold: No Scaling"
+               arg-set="-scaleThreshold noScale"
+               />
+   </select>
+
+   <select id="tileChoice">
+       <option id="tileChoice-random"
+               _label="Tile Choice: Random"
+               />
+       <option id="tileChoice-sequential"
+               _label="Tile Choice: Sequential"
+               arg-set="-tileChoice sequential"
+               />
+   </select>
+
+   <boolean id="decorateBevel"
+              _label="Tile Decorations: Bevel"
+               arg-set="-bevel true"
+               arg-unset="-bevel false"
+              />
+
+   <boolean id="roundedCorners"
+              _label="Tile Decorations: Rounded Corners"
+               arg-set="-roundedCorners true"
+               arg-unset="-roundedCorners false"
+              />
+
+   <boolean id="glare"
+              _label="Tile Decorations: Glare"
+               arg-set="-glare true"
+               arg-unset="-glare false"
+              />
+
+<_description>
+Image Tiles
+
+http://image-tiles.dev.java.net/
+
+Image Tiles displays animated mosaics of images.
+The screensaver contains a range of options that allow many different effects to be achieved.
+A description of the meaning and effect of each option follows.
+
+Image Directory:
+Use this field to point Image Tiles at a directory/folder containing images to be displayed.
+
+Search Subdirectories:
+Enabling this option causes Image Tiles to search all subdirectories of the specified
+directory/folder for images to display. Otherwise only images directly under the directory will be
+displayed.
+
+Random Image Order:
+When enabled, Image Tiles will display the images it finds in a random order. Otherwise, they will
+be displayed in the order they are supplied by the operating system (which, normally, is
+alphabetical).
+
+Start at Random Image:
+When the 'Random Image Order' option is OFF, enabling this option will cause Image Tiles to start
+displaying images from a random position in the list of images and then continue in order from that
+image onward. If this option is not on, Image Tiles will always start at the same image.
+
+Tile Size:
+The size of each tile, in pixels, is determined by this setting. Variations in tile size will
+greatly change the resulting effect: very small tiles will give an effect like small lights changing
+colours; small tiles will give an effect like the departures board at an airport; larger tiles will
+appear like pieces of a puzzle being moved into place while very large tiles will seem like large,
+painted rocks sliding across the screen.
+Note that the tile size and tile speed should be adjusted inversely: when raising one, raise the
+other as well. Large tiles moving very quick will almost not be seen, while lots of small tiles
+moving slowly will be very boring.
+
+Gap Size:
+Specifies the size of the gap between each row and column of tiles.
+
+Animated Tiles:
+Specifies the number of tiles that are animated at any one time.
+
+Slide Speed:
+Determines how fast each tile slides across the screen, specified in pixels per second.
+
+Transition Interval:
+Allows you to specify how long each image will remain on the screen after all the tiles for the
+image have 'arrived' and before the tiles for the next image start appearing.
+
+Clear Images:
+After each image has fully appeared, the tiles for that image can either be cleared, leaving a blank
+space for the next image to appear over, or they can be left in place, creating a 'stacking' effect
+as the tiles from the next picture replace the last ones.
+
+Target Frame Rate:
+Specifies how frequently the screen will be redrawn. A higher number will result in much smoother
+movement, but will also use much more processor power.
+
+Scale Threshold:
+Images that are smaller than the screen size can be scaled up. Scaling can be turned off, limited to
+2X zoom or unlimited (i.e. always scale to the screen size).
+
+Tile Choice:
+The order in which tiles are chosen to be animated onto the screen can be either random (tiles start
+appearing at random locations all over the screen) or sequential (tiles at the top of the screen
+start appearing first).
+
+Decorations:
+Tiles can be given certain decorations to make them look more like real tiles.
+'Bevel' gives tiles a 3D look by making their edges look 3D.
+'Rounded Corners' rounds the corners of each tile.
+'Glare' makes each tile look as if a small amount of light is reflecting off of it.
+
+Copyright (c) 2005 Graham Lea
+
+</_description>
+
+</screensaver>
