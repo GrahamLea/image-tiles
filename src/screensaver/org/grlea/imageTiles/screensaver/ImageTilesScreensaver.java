@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.screensaver;
 
-// $Id: ImageTilesScreensaver.java,v 1.1 2005-04-01 03:13:21 grlea Exp $
+// $Id: ImageTilesScreensaver.java,v 1.2 2005-04-03 08:29:16 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,7 +75,7 @@ import javax.swing.JOptionPane;
  * <p></p>
  *
  * @author Graham Lea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 ImageTilesScreensaver
@@ -292,7 +292,7 @@ implements PipelineFrameListener
 
       GradientPaint paint = new GradientPaint(width * 3 / 7, height / 7, Color.white,
                                               width * 4 / 7, height,
-                                              new Color(128, 0, 0));
+                                              new Color(0, 0, 128));
       graphics.setPaint(paint);
       graphics.fillRect(0, 0, width, height);
 
@@ -319,6 +319,13 @@ implements PipelineFrameListener
       FontMetrics urlFontMetrics = graphics.getFontMetrics();
       yOffset += urlFontMetrics.getLeading() + urlFontMetrics.getAscent();
       graphics.drawString(urlText, xOffset, yOffset);
+
+      String errorText = "Please select a directory containing images.";
+      Font errorFont = urlFont;
+      graphics.setFont(errorFont);
+      FontMetrics errorFontMetrics = graphics.getFontMetrics();
+      yOffset += (errorFontMetrics.getLeading() + errorFontMetrics.getAscent()) * 2;
+      graphics.drawString(errorText, xOffset, yOffset);
 
       graphics.dispose();
 
