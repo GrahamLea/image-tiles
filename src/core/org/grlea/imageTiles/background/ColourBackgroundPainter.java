@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.background;
 
-// $Id: ColourBackgroundPainter.java,v 1.2 2004-09-04 07:59:22 grlea Exp $
+// $Id: ColourBackgroundPainter.java,v 1.3 2005-03-31 20:46:09 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,12 +20,14 @@ import org.grlea.imageTiles.TileSpace;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Dimension;
+import java.awt.Point;
 
 /**
  * <p>Fills the background with a specified colour.</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class 
 ColourBackgroundPainter
@@ -33,27 +35,24 @@ implements BackgroundPainter
 {
    private static final Color DEFAULT_BACKGROUND_COLOUR = Color.black;
 
-   private final TileSpace tileSpace;
-
    private final Color backgroundColour;
 
    public
-   ColourBackgroundPainter(TileSpace tileSpace)
+   ColourBackgroundPainter()
    {
-      this(tileSpace, DEFAULT_BACKGROUND_COLOUR);
+      this(DEFAULT_BACKGROUND_COLOUR);
    }
 
    public
-   ColourBackgroundPainter(TileSpace tileSpace, Color backgroundColour)
+   ColourBackgroundPainter(Color backgroundColour)
    {
-      this.tileSpace = tileSpace;
       this.backgroundColour = backgroundColour;
    }
 
    public void
-   paintBackground(Graphics2D graphics)
+   paintBackground(Graphics2D graphics, Dimension canvasSize, Point tileSpaceOffset)
    {
       graphics.setColor(backgroundColour);
-      graphics.fillRect(0, 0, tileSpace.getWidth(), tileSpace.getHeight());
+      graphics.fillRect(0, 0, canvasSize.width, canvasSize.height);
    }
 }

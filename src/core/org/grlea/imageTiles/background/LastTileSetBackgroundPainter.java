@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.background;
 
-// $Id: LastTileSetBackgroundPainter.java,v 1.1 2004-09-04 07:59:22 grlea Exp $
+// $Id: LastTileSetBackgroundPainter.java,v 1.2 2005-03-31 20:46:09 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,9 @@ import org.grlea.imageTiles.pipeline.Pipeline;
 import org.grlea.imageTiles.pipeline.PipelineTransitionListener;
 
 import java.awt.Graphics2D;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
@@ -30,11 +33,12 @@ import java.awt.image.BufferedImage;
  * the {@link Pipeline} as a {@link PipelineTransitionListener}.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 LastTileSetBackgroundPainter
-implements BackgroundPainter, PipelineTransitionListener
+extends ColourBackgroundPainter
+implements PipelineTransitionListener
 {
    private BufferedImage bufferImage;
 
@@ -56,12 +60,15 @@ implements BackgroundPainter, PipelineTransitionListener
       bufferGraphics.dispose();
       bufferGraphics = null;
    }
+
    public void
-   paintBackground(Graphics2D graphics)
+   paintBackground(Graphics2D graphics, Dimension canvasSize, Point tileSpaceOffset)
    {
+      super.paintBackground(graphics, canvasSize, tileSpaceOffset);
+
       if (bufferImage != null)
       {
-         graphics.drawImage(bufferImage, 0, 0, null);
+         graphics.drawImage(bufferImage, tileSpaceOffset.x, tileSpaceOffset.y, null);
       }
    }
 }

@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.background;
 
-// $Id: TransparentBackgroundPainter.java,v 1.2 2004-09-04 07:59:22 grlea Exp $
+// $Id: TransparentBackgroundPainter.java,v 1.3 2005-03-31 20:46:09 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,28 +19,27 @@ import org.grlea.imageTiles.BackgroundPainter;
 import org.grlea.imageTiles.TileSpace;
 
 import java.awt.Graphics2D;
+import java.awt.Dimension;
+import java.awt.Point;
 
 /**
  * <p>Clears the background to the graphics object's background (usually 100% transparent).</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class 
 TransparentBackgroundPainter
 implements BackgroundPainter
 {
-   private final TileSpace tileSpace;
-
    public
-   TransparentBackgroundPainter(TileSpace tileSpace)
+   TransparentBackgroundPainter()
    {
-      this.tileSpace = tileSpace;
    }
 
    public void
-   paintBackground(Graphics2D graphics)
+   paintBackground(Graphics2D graphics, Dimension canvasSize, Point tileSpaceOffset)
    {
-      graphics.clearRect(0, 0, tileSpace.getWidth(), tileSpace.getHeight());
+      graphics.clearRect(0, 0, canvasSize.width, canvasSize.height);
    }
 }

@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: BackgroundPainter.java,v 1.2 2004-09-04 07:59:16 grlea Exp $
+// $Id: BackgroundPainter.java,v 1.3 2005-03-31 20:46:09 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,16 +16,18 @@ package org.grlea.imageTiles;
 // limitations under the License.
 
 import java.awt.Graphics2D;
+import java.awt.Dimension;
+import java.awt.Point;
 
 /**
  * <p>Paints the background over which an animated tile set is drawn.</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public interface
 BackgroundPainter
 {
    void
-   paintBackground(Graphics2D graphics);
+   paintBackground(Graphics2D graphics, Dimension canvasSize, Point tileSpaceOffset);
 }

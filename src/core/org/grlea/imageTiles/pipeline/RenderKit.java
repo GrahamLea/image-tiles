@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.pipeline;
 
-// $Id: RenderKit.java,v 1.1 2004-09-04 07:59:28 grlea Exp $
+// $Id: RenderKit.java,v 1.2 2005-03-31 20:53:06 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,12 +21,14 @@ import org.grlea.imageTiles.Transition;
 import org.grlea.imageTiles.TileHolderRenderer;
 
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Dimension;
 
 /**
  * <p>Object for rendering the animation of a Transition. Used by the Pipeline.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class
 RenderKit
@@ -47,14 +49,18 @@ RenderKit
 
    // TODO (grahaml) Gotta get this TileHolder out of this signature!?
    public void
-   render(TileHolder tileHolder, Graphics2D graphics)
+   render(TileHolder tileHolder, Graphics2D graphics, Dimension canvasSize, Point tilespaceOffset)
    {
 //      long startTime = System.currentTimeMillis();
-      background.paintBackground(graphics);
+      background.paintBackground(graphics, canvasSize, tilespaceOffset);
 //      long startPainterTime = System.currentTimeMillis();
+      graphics.translate(tilespaceOffset.x, tilespaceOffset.y);
+
       tileHolderRenderer.render(tileHolder, graphics);
 //      long startTransitionTime = System.currentTimeMillis();
       transition.render(graphics);
+
+      graphics.translate(-tilespaceOffset.x, -tilespaceOffset.y);
 //      long endTime = System.currentTimeMillis();
 
 //      long backgroundTime = startPainterTime - startTime;

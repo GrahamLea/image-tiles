@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: ImageTilesDefaults.java,v 1.1 2004-09-04 07:59:17 grlea Exp $
+// $Id: ImageTilesDefaults.java,v 1.2 2005-03-31 20:50:35 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@ import org.grlea.imageTiles.render.PlainTileRenderer;
  * <p>Constants and methods for easily obtaining default Image Tiles objects.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 ImageTilesDefaults
@@ -62,7 +62,7 @@ ImageTilesDefaults
    public static BackgroundPainter
    getDefaultBackground(TileSpace tileSpace)
    {
-      return new ColourBackgroundPainter(tileSpace);
+      return new ColourBackgroundPainter();
    }
 
    public static TileRenderer

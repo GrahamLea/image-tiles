@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.pipeline;
 
-// $Id: Pipeline.java,v 1.3 2005-03-19 00:11:37 grlea Exp $
+// $Id: Pipeline.java,v 1.4 2005-03-31 20:53:06 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +23,8 @@ import org.grlea.imageTiles.ImageSource;
 
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.Component;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -41,11 +43,13 @@ import javax.swing.Timer;
  * request rendering through the {@link #render} method.</p>
  *
  * @author grlea
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class
 Pipeline
 {
+   private final Point zeroOffset = new Point(0, 0);
+
    private final PipelineComponents components;
 
    private final int transitionInterval;
@@ -197,10 +201,6 @@ Pipeline
       // is being updated.
       synchronized (ANIMATION_LOCK)
       {
-         long currentTime = System.currentTimeMillis();
-         long timeSinceLastFrame = currentTime - lastFrameAdvance;
-         lastFrameAdvance = currentTime;
-
          if (createNewTileSet)
          {
             createNewTileSet = false;
@@ -227,9 +227,15 @@ Pipeline
             // Notify Listeners, then reset the AnimationKit
             notifyNewTransition(oldTileSet, currentTileSet);
             components.animationKit.newTransition(oldTileSet, currentTileSet, tileHolder);
+
+            lastFrameAdvance = System.currentTimeMillis();
          }
          else
          {
+            long currentTime = System.currentTimeMillis();
+            long timeSinceLastFrame = currentTime - lastFrameAdvance;
+            lastFrameAdvance = currentTime;
+
             // Advance the frame
 //            long startTime = System.currentTimeMillis();
             components.animationKit.advanceFrame(timeSinceLastFrame);
@@ -239,21 +245,23 @@ Pipeline
          }
       }
 
-      frames++;
-      long time = System.currentTimeMillis();
-      if (time - lastFrameRateReportTime > 1000)
-      {
-         long seconds = ((time - startTime) / 1000);
-         if (seconds != 0)
-         {
-            long frameRate = frames / seconds;
-            System.out.println("frameRate = " + frameRate);
-            long newFrames = frames - lastFrames;
-            System.out.println("newFrames = " + newFrames);
-            lastFrameRateReportTime = time;
-            lastFrames = frames;
-         }
-      }
+//      frames++;
+//      long time = System.currentTimeMillis();
+//      if (time - lastFrameRateReportTime > 1000)
+//      {
+//         long seconds = ((time - startTime) / 1000);
+//         if (seconds != 0)
+//         {
+//            long frameRate = frames / seconds;
+//            System.out.println("frameRate = " + frameRate);
+//            long newFrames = frames - lastFrames;
+//            System.out.println("newFrames = " + newFrames);
+//            lastFrameRateReportTime = time;
+//            lastFrames = frames;
+//         }
+//      }
+
+      notifyAdvancedFrame();
    }
 
    public void
@@ -265,12 +273,29 @@ Pipeline
    public void
    render(Graphics2D graphics)
    {
+      render(graphics, tileHolder.getTileSpace().getSize(), zeroOffset);
+   }
+
+   public void
+   render(Graphics2D graphics, Component component)
+   {
+      int componentWidth = component.getWidth();
+      int componentHeight = component.getHeight();
+      int marginX = (componentWidth - components.getTileSpace().getWidth()) / 2;
+      int marginY = (componentHeight - components.getTileSpace().getHeight()) / 2;
+      render(graphics, component.getSize(), new Point(marginX, marginY));
+   }
+
+   private void
+   render(Graphics2D graphics, Dimension canvasSize, Point tilespaceOffset)
+   {
       // We lock here and in advanceFrame() to ensure rendering isn't attempted while the animation
       // state is being updated.
       synchronized (ANIMATION_LOCK)
       {
+
 //         long startTime = System.currentTimeMillis();
-         components.renderKit.render(tileHolder, graphics);
+         components.renderKit.render(tileHolder, graphics, canvasSize, tilespaceOffset);
 //         long endTime = System.currentTimeMillis();
 //         long renderFrameTime = endTime - startTime;
 //         System.out.println("renderFrameTime =    " + renderFrameTime);
@@ -308,7 +333,6 @@ Pipeline
 //         System.out.println(timeNow - lastExecutionTime);
 //         lastExecutionTime = timeNow;
          advanceFrame();
-         notifyAdvancedFrame();
       }
    }
 
