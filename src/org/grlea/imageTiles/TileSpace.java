@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: TileSpace.java,v 1.1 2004-08-20 05:25:37 grlea Exp $
+// $Id: TileSpace.java,v 1.2 2004-08-23 04:56:56 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,22 +15,24 @@ package org.grlea.imageTiles;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 
 /**
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 TileSpace
 {
    private final int tileSize;
 
-   private final int gap;
+   private final int gapSize;
 
    private final int columns;
    private final int rows;
@@ -41,19 +43,19 @@ TileSpace
    private final Tile[][] tiles;
 
    public
-   TileSpace(int tileSize, int gap, int columns, int rows)
+   TileSpace(int tileSize, int gapSize, int columns, int rows)
    {
       this.tileSize = tileSize;
-      this.gap = gap;
+      this.gapSize = gapSize;
       this.columns = columns;
       this.rows = rows;
 
       this.tiles = new Tile[rows][columns];
 
-      this.width = (columns * tileSize) + ((columns - 1) * gap);
-      this.height = (rows * tileSize) + ((rows - 1) * gap);
+      this.width = (columns * tileSize) + ((columns - 1) * gapSize);
+      this.height = (rows * tileSize) + ((rows - 1) * gapSize);
 
-      int tileAndGapSize = tileSize + gap;
+      int tileAndGapSize = tileSize + gapSize;
 
       int xOffset = 0;
       int yOffset = 0;
@@ -67,14 +69,6 @@ TileSpace
          xOffset = 0;
          yOffset += tileAndGapSize;
       }
-   }
-
-   public static TileSpace
-   createTileSpace(Rectangle bounds, int tileSize, int gap)
-   {
-      int columns = bounds.width / (tileSize + gap);
-      int rows = bounds.height / (tileSize + gap);
-      return new TileSpace(tileSize, gap, columns, rows);
    }
 
    public int
