@@ -50,6 +50,7 @@
    <property name="buildDir" value="${releaseDir}/build"/>
    <property name="wwwDir" value="www"/>
    <property name="wwwReleaseDir" value="${wwwDir}/release"/>
+   <property name="wwwJnlpDir" value="${wwwDir}/jnlp"/>
 
    <property name="tempDir" value="${releaseDir}/temp"/>
    <property name="classes" value="${tempDir}/classes"/>
@@ -108,14 +109,20 @@
    </path>
 
    <!-- Jars -->
-   <property name="jar.core" value="${buildDir}/${ant.project.name}-core.jar"/>
-   <property name="jar.swing" value="${buildDir}/${ant.project.name}-swing.jar"/>
-   <property name="jar.simpleDemo" value="${buildDir}/${ant.project.name}-simpleDemo.jar"/>
-   <property name="jar.inApplicationDemo" value="${buildDir}/${ant.project.name}-inApplicationDemo.jar"/>
+   <property name="jar.core.name" value="${ant.project.name}-core.jar"/>
+   <property name="jar.swing.name" value="${ant.project.name}-swing.jar"/>
+   <property name="jar.simpleDemo.name" value="${ant.project.name}-simpleDemo.jar"/>
+   <property name="jar.inApplicationDemo.name" value="${ant.project.name}-inApplicationDemo.jar"/>
+   <property name="jar.core" value="${buildDir}/${jar.core.name}"/>
+   <property name="jar.swing" value="${buildDir}/${jar.swing.name}"/>
+   <property name="jar.simpleDemo" value="${buildDir}/${jar.simpleDemo.name}"/>
+   <property name="jar.inApplicationDemo" value="${buildDir}/${jar.inApplicationDemo.name}"/>
 
    <!-- Zips -->
-   <property name="sourceZip" value="${buildDir}/${ant.project.name}-src.zip"/>
-   <property name="docZip" value="${buildDir}/${ant.project.name}-doc.zip"/>
+   <property name="sourceZipName" value="${ant.project.name}-src.zip"/>
+   <property name="sourceZip" value="${buildDir}/${sourceZipName}"/>
+   <property name="docZipName" value="${ant.project.name}-doc.zip"/>
+   <property name="docZip" value="${buildDir}/${docZipName}"/>
    <property name="releaseZipName" value="${ant.project.name}-${product.version}.zip"/>
    <property name="releaseZip" value="${releaseDir}/${releaseZipName}"/>
 
@@ -142,14 +149,37 @@
          <fileset dir="${buildDir}">
             <include name="LICENSE.txt"/>
             <include name="README.txt"/>
-            <include name="imageTiles-core.jar"/>
-            <include name="imageTiles-swing.jar"/>
-            <include name="imageTiles-simpleDemo.jar"/>
-            <include name="imageTiles-inApplicationDemo.jar"/>
-            <include name="imageTiles-doc.zip"/>
-            <include name="imageTiles-src.zip"/>
+            <include name="${jar.core.name}"/>
+            <include name="${jar.swing.name}"/>
+            <include name="${jar.simpleDemo.name}"/>
+            <include name="${jar.inApplicationDemo.name}"/>
+            <include name="${docZipName}"/>
+            <include name="${sourceZipName}"/>
          </fileset>
       </copy>
+
+      <delete>
+         <fileset dir="${wwwJnlpDir}" includes="**"/>
+      </delete>
+      <copy todir="${wwwJnlpDir}">
+         <fileset dir="${buildDir}">
+            <include name="${jar.core.name}"/>
+            <include name="${jar.swing.name}"/>
+            <include name="${jar.simpleDemo.name}"/>
+            <include name="${jar.inApplicationDemo.name}"/>
+         </fileset>
+      </copy>
+      <copy todir="${wwwJnlpDir}/lib">
+         <fileset dir="${wwwDir}/lib">
+            <include name="${lib.explicitLayout.name}"/>
+            <include name="${lib.explicitTableLayout.name}"/>
+            <include name="${lib.jgoodiesLooksPlastic.name}"/>
+         </fileset>
+      </copy>
+
+      <signjar alias="${keystore.alias}" storepass="${keystore.password}">
+         <fileset dir="${wwwJnlpDir}" includes="**"/>
+      </signjar>
 
    </target>
 
@@ -168,6 +198,7 @@
       <mkdir dir="${releaseDir}"/>
       <mkdir dir="${buildDir}"/>
       <mkdir dir="${javadocDir}"/>
+      <mkdir dir="${wwwJnlpDir}"/>
 
       <mkdir dir="${libDir}"/>
       <copy file="${lib.explicitLayout.dir}/${lib.explicitLayout.name}" todir="${libDir}"/>
@@ -181,7 +212,7 @@
    </target>
 
    <target name="BuildCodeJars"
-           depends="BuildCodeJar-core, BuildCodeJar-inApplicationDemo, BuildCodeJar-simpleDemo, BuildCodeJar-swing">
+           depends="BuildCodeJar-core, BuildCodeJar-swing, BuildCodeJar-simpleDemo, BuildCodeJar-inApplicationDemo">
    </target>
 
    <target name="BuildCodeJar-core" depends="CompileJavas-core, CopyResources-core">
@@ -215,7 +246,6 @@
            manifest="${manifest.inApplicationDemo}"
          includes="**"/>
    </target>
-
 
 
    <target name="CompileJavas"
