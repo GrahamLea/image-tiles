@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.render;
 
-// $Id: DecorativeTileRenderer.java,v 1.2 2004-09-04 07:59:29 grlea Exp $
+// $Id: DecorativeTileRenderer.java,v 1.3 2005-03-31 21:23:11 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,14 +29,14 @@ import java.awt.image.BufferedImage;
  * Tile.</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class
 DecorativeTileRenderer
 implements TileRenderer
 {
    /** Almost black. */
-   private static final Color DEFAULT_BACKGROUND_COLOUR = new Color(32, 32, 32);
+   private static final Color DEFAULT_BACKGROUND_COLOUR = new Color(16, 16, 16);
 
    private final Color tileBackgroundColour;
 
