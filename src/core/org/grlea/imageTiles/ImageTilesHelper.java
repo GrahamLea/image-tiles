@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: ImageTilesHelper.java,v 1.2 2004-08-27 01:14:11 grlea Exp $
+// $Id: ImageTilesHelper.java,v 1.3 2004-08-29 22:24:25 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +17,14 @@ package org.grlea.imageTiles;
 
 import java.awt.Component;
 import java.awt.Rectangle;
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 /**
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class
 ImageTilesHelper
@@ -37,7 +38,7 @@ ImageTilesHelper
    {
       int width = image.getWidth();
       int height = image.getHeight();
-      int tileSize = (int) (Math.sqrt(width * height) / 16);
+      int tileSize = (int) (Math.sqrt(Math.sqrt(width * height)) * 1.5);
       return tileSize;
    }
 
@@ -54,13 +55,18 @@ ImageTilesHelper
    }
 
    public static TileSpace
-   createTileSpace(Component component, int tileSize, int gap)
+   createTileSpace(Component component, int tileSize, int gapSize)
    {
-      int tileAndGapWidth = tileSize + gap;
-      Rectangle bounds = component.getBounds();
-      int columns = bounds.width / (tileAndGapWidth);
-      int rows = bounds.height / (tileAndGapWidth);
-      return new TileSpace(tileSize, gap, columns, rows);
+      return createTileSpace(component.getSize(), tileSize, gapSize);
+   }
+
+   public static TileSpace
+   createTileSpace(Dimension dimensions, int tileSize, int gapSize)
+   {
+      int tileAndGapWidth = tileSize + gapSize;
+      int columns = dimensions.width / (tileAndGapWidth);
+      int rows = dimensions.height / (tileAndGapWidth);
+      return new TileSpace(tileSize, gapSize, columns, rows);
    }
 
    public static TileSpace
