@@ -154,7 +154,7 @@
 
    <!-- Targets -->
 
-   <target name="CreateRelease" depends="Clean, BuildRelease">
+   <target name="CreateRelease" depends="Clean, BuildRelease, Create-screensaver">
       <delete dir="${docDir}" includeemptydirs="true" />
       <zip zipfile="${releaseZip}" >
          <zipfileset dir="${buildDir}" includes="**/*" excludes="${releaseZipName}"
@@ -162,15 +162,15 @@
       </zip>
    </target>
 
-   <target name="CreateReleaseAndBuildWww" depends="Clean, BuildRelease, CopyWwwArtefacts, CreateRelease">
+   <target name="CreateReleaseAndBuildWww" depends="Clean, BuildRelease, CreateRelease, CopyWwwArtefacts">
       <copy file="${releaseZip}" todir="${wwwReleaseDir}"/>
    </target>
 
    <target name="CopyWwwArtefacts" depends="BuildRelease">
 
-      <delete>
-         <fileset dir="${wwwReleaseDir}" includes="**"/>
-      </delete>
+<!--      <delete>-->
+<!--         <fileset dir="${wwwReleaseDir}" includes="**"/>-->
+<!--      </delete>-->
       <copy todir="${wwwReleaseDir}">
          <fileset dir="${buildDir}">
             <include name="LICENSE.txt"/>
@@ -181,6 +181,12 @@
             <include name="${jar.inApplicationDemo.name}"/>
             <include name="${docZipName}"/>
             <include name="${sourceZipName}"/>
+         </fileset>
+      </copy>
+
+      <copy todir="${wwwReleaseDir}">
+         <fileset dir="${releaseDir}">
+            <include name="imageTiles-screensaver-win32.zip"/>
          </fileset>
       </copy>
 
