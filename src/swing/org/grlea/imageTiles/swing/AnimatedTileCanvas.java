@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.swing;
 
-// $Id: AnimatedTileCanvas.java,v 1.2 2004-08-27 01:19:36 grlea Exp $
+// $Id: AnimatedTileCanvas.java,v 1.3 2004-08-29 22:23:53 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,44 +16,44 @@ package org.grlea.imageTiles.swing;
 // limitations under the License.
 
 import org.grlea.imageTiles.AnimationController;
+import org.grlea.imageTiles.AnimationKit;
 import org.grlea.imageTiles.AnimationKitListener;
 import org.grlea.imageTiles.AnimationRenderKit;
 import org.grlea.imageTiles.Animator;
 import org.grlea.imageTiles.BackgroundPainter;
-import org.grlea.imageTiles.pipeline.ImageSource;
+import org.grlea.imageTiles.ImageTilesHelper;
 import org.grlea.imageTiles.Painter;
-import org.grlea.imageTiles.pipeline.Pipeline;
-import org.grlea.imageTiles.pipeline.PipelineImageChanger;
-import org.grlea.imageTiles.pipeline.PipelineListener;
-import org.grlea.imageTiles.pipeline.PipelineTicker;
 import org.grlea.imageTiles.Placer;
+import org.grlea.imageTiles.RenderKit;
 import org.grlea.imageTiles.SchedulerPausingAnimationKitListener;
 import org.grlea.imageTiles.TileRenderer;
 import org.grlea.imageTiles.TileSpace;
-import org.grlea.imageTiles.RenderKit;
-import org.grlea.imageTiles.AnimationKit;
 import org.grlea.imageTiles.animate.SlideAnimator;
 import org.grlea.imageTiles.background.ColourBackgroundPainter;
 import org.grlea.imageTiles.choose.RandomChooser;
 import org.grlea.imageTiles.paint.StaticPainter;
+import org.grlea.imageTiles.pipeline.ImageSource;
+import org.grlea.imageTiles.pipeline.Pipeline;
+import org.grlea.imageTiles.pipeline.PipelineImageChanger;
+import org.grlea.imageTiles.pipeline.PipelineListener;
+import org.grlea.imageTiles.pipeline.PipelineTicker;
+import org.grlea.imageTiles.pipeline.imageSource.SingleImageSource;
 import org.grlea.imageTiles.place.CentrePlacer;
+import org.grlea.imageTiles.render.PlainTileRenderer;
 import org.grlea.util.FixedRateScheduler;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.Component;
-import java.awt.event.HierarchyEvent;
-import java.awt.event.HierarchyListener;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
-
-import javax.swing.JComponent;
 
 /**
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class
 AnimatedTileCanvas
@@ -68,6 +68,24 @@ extends Component
    private Pipeline pipeline;
 
    private VolatileImage buffer = null;
+
+   public
+   AnimatedTileCanvas(BufferedImage image)
+   {
+      this(ImageTilesHelper.createTileSpace(image), new SingleImageSource(image));
+   }
+
+   public
+   AnimatedTileCanvas(TileSpace tileSpace, BufferedImage image)
+   {
+      this(tileSpace, new SingleImageSource(image));
+   }
+
+   public
+   AnimatedTileCanvas(TileSpace tileSpace, ImageSource imageSource)
+   {
+      this(tileSpace, imageSource, new PlainTileRenderer());
+   }
 
    public
    AnimatedTileCanvas(TileSpace tileSpace, ImageSource imageSource, TileRenderer renderer)
@@ -140,9 +158,13 @@ extends Component
          // VolatileImage handling code courtesy of the legendary Chet Haase
          int validateCode = buffer.validate(getGraphicsConfiguration());
          if (validateCode == VolatileImage.IMAGE_INCOMPATIBLE)
+         {
             createBuffer();
+         }
 
-         pipeline.render(buffer.createGraphics());
+         Graphics2D bufferGraphics = buffer.createGraphics();
+         pipeline.render(bufferGraphics);
+         bufferGraphics.dispose();
 
          graphics.drawImage(buffer, 0, 0, null);
       }
