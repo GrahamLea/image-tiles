@@ -1,6 +1,6 @@
-package org.grlea.imageTiles.imageSource;
+package org.grlea.imageTiles.pipeline.imageSource;
 
-// $Id: SequentialImageSource.java,v 1.1 2004-08-23 22:47:40 grlea Exp $
+// $Id: SequentialImageSource.java,v 1.1 2004-08-27 01:07:02 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@ package org.grlea.imageTiles.imageSource;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import org.grlea.imageTiles.ImageSource;
+import org.grlea.imageTiles.pipeline.ImageSource;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
