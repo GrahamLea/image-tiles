@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.demo;
 
-// $Id: SimpleDemo.java,v 1.2 2004-09-04 07:59:36 grlea Exp $
+// $Id: SimpleDemo.java,v 1.3 2005-04-01 02:30:28 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,7 @@ import org.grlea.imageTiles.render.GlareDecorator;
 import org.grlea.imageTiles.render.RoundedCornerDecorator;
 import org.grlea.imageTiles.swing.AnimatedTileCanvas;
 import org.grlea.imageTiles.transition.SlideTransition;
+import org.grlea.imageTiles.transition.BasicTransition;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -103,7 +104,7 @@ import javax.swing.SwingUtilities;
  * </pre></p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class
 SimpleDemo
@@ -169,7 +170,7 @@ SimpleDemo
       {
          try
          {
-            imageSource = new DirectoryImageSource(imageFile, new ImageFileFilter(), true);
+            imageSource = new DirectoryImageSource(imageFile, new ImageFileFilter(), true, true);
          }
          catch (IOException e)
          {
