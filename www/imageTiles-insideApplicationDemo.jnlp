@@ -19,7 +19,7 @@
      <jar href="release/imageTiles-inApplicationDemo.jar"/>
      <jar href="release/imageTiles-swing.jar"/>
      <jar href="release/imageTiles-core.jar"/>
-     <jar href="lib/elcore.jar.jar"/>
+     <jar href="lib/elcore.jar"/>
      <jar href="lib/explicit-tablelayout-0.1.16.jar"/>
      <jar href="lib/plastic-1.2.1.jar"/>
   </resources>
