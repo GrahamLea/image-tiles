@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: AnimationControllerListener.java,v 1.1 2004-08-20 05:25:35 grlea Exp $
+// $Id: AnimationStateListener.java,v 1.1 2004-08-23 04:54:08 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@ package org.grlea.imageTiles;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import java.lang.Object;
+
 
 /**
  * <p></p>
@@ -24,7 +24,7 @@ import java.lang.Object;
  * @version $Revision: 1.1 $
  */
 public interface
-AnimationControllerListener
+AnimationStateListener
 {
    public void
    animationComplete();
