@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.demo;
 
-// $Id: SimpleAnimationDemo.java,v 1.1 2004-08-23 05:03:39 grlea Exp $
+// $Id: SimpleAnimationDemo.java,v 1.2 2004-08-23 22:33:28 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,7 +56,7 @@ import javax.swing.JFrame;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 SimpleAnimationDemo
@@ -163,7 +163,7 @@ SimpleAnimationDemo
       TileSpace tileSpace = ImageTilesHelper.createTileSpace(image, tileSize, DEFAULT_GAP);
 
       Scaler scaler = new FullScaler();
-      Placer positionChooser = new CentrePlacer();
+      Placer placer = new CentrePlacer();
 
       Decorator[] tileDecorators = {
          new BevelEdgeDecorator(tileSpace),
@@ -173,7 +173,7 @@ SimpleAnimationDemo
       TileRenderer tileRenderer = new DecorativeTileRenderer(tileDecorators);
 
       BufferedImage scaledImage = scaler.scale(image, tileSpace);
-      Point position = positionChooser.choosePosition(scaledImage, tileSpace);
+      Point position = placer.choosePosition(scaledImage, tileSpace);
 
       TileSet tileSet = new TileSet(tileSpace, scaledImage, position, tileRenderer);
 
