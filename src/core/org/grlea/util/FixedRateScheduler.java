@@ -1,6 +1,6 @@
 package org.grlea.util;
 
-// $Id: FixedRateScheduler.java,v 1.1 2004-08-23 22:47:43 grlea Exp $
+// $Id: FixedRateScheduler.java,v 1.2 2004-08-27 01:03:01 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ package org.grlea.util;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 FixedRateScheduler
@@ -63,11 +63,11 @@ FixedRateScheduler
       synchronized (currentExecutorLock)
       {
          if (currentExecutor != null)
-            throw new IllegalStateException("Scheduler already running.");
+            return;
 
-         // TODO (grahaml) Maybe do something trickier than creating a new thread each time.
+         // TODO (grahaml) Maybe do something trickier than creating a new thread each time?
          currentExecutor = new Executor();
-         Thread thread = new Thread(currentExecutor);
+         Thread thread = new Thread(currentExecutor, "FixedRateScheduler");
          thread.setDaemon(daemon);
          thread.start();
       }
