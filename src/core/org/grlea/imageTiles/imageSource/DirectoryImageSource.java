@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.imageSource;
 
-// $Id: DirectoryImageSource.java,v 1.1 2004-09-04 07:59:23 grlea Exp $
+// $Id: DirectoryImageSource.java,v 1.2 2005-03-31 20:49:13 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,7 @@ import javax.imageio.ImageIO;
  * loaded only when it is to be returned.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 DirectoryImageSource
@@ -43,31 +43,45 @@ implements ImageSource
 {
    private final File[] imageFiles;
 
+   private final boolean randomOrder;
+
    private final Random random;
+
+   private int nextImageFileIndex = 0;
 
    public
    DirectoryImageSource(File directory)
    throws IOException
    {
-      this(directory, true);
+      this(directory, true, true, true);
    }
 
    public
-   DirectoryImageSource(File directory, FileFilter fileFilter)
+   DirectoryImageSource(File directory, boolean randomOrder, boolean randomFirstImage)
    throws IOException
    {
-      this(directory, fileFilter, true);
+      this(directory, randomOrder, randomFirstImage, true);
    }
 
    public
-   DirectoryImageSource(File directory, boolean searchSubdirectories)
+   DirectoryImageSource(File directory, FileFilter fileFilter, boolean randomOrder,
+                        boolean randomFirstImage)
    throws IOException
    {
-      this(directory, new ImageFileFilter(), searchSubdirectories);
+      this(directory, fileFilter, randomOrder, randomFirstImage, true);
    }
 
    public
-   DirectoryImageSource(File directory, FileFilter fileFilter, boolean searchSubdirectories)
+   DirectoryImageSource(File directory, boolean randomOrder, boolean randomFirstImage,
+                        boolean searchSubdirectories)
+   throws IOException
+   {
+      this(directory, new ImageFileFilter(), randomOrder, randomFirstImage, searchSubdirectories);
+   }
+
+   public
+   DirectoryImageSource(File directory, FileFilter fileFilter, boolean randomOrder,
+                        boolean randomFirstImage, boolean searchSubdirectories)
    throws IOException
    {
       if (!searchSubdirectories)
@@ -83,10 +97,20 @@ implements ImageSource
          imageFiles = (File[]) imageFilesList.toArray(new File[imageFilesList.size()]);
       }
 
+      if (imageFiles == null)
+         throw new IOException("Error reading contents of " + directory.getAbsolutePath());
+      
       if (imageFiles.length == 0)
          throw new IOException("No image files found in " + directory.getAbsolutePath());
 
-      random = new Random();
+      this.randomOrder = randomOrder;
+      if (randomOrder || randomFirstImage)
+         random = new Random();
+      else
+         random = null;
+
+      if (randomFirstImage)
+         nextImageFileIndex = random.nextInt(imageFiles.length);
    }
 
    private void
@@ -117,7 +141,24 @@ implements ImageSource
 
       do
       {
-         int imageFileIndex = random.nextInt(imageFiles.length);
+         int imageFileIndex;
+         if (randomOrder)
+         {
+            imageFileIndex = nextImageFileIndex;
+            if (imageFiles.length != 1)
+            {
+               // Choose a *different* random image for next time
+               while (nextImageFileIndex == imageFileIndex)
+                  nextImageFileIndex = random.nextInt(imageFiles.length);
+            }
+         }
+         else
+         {
+            if (nextImageFileIndex >= imageFiles.length)
+               nextImageFileIndex = 0;
+            imageFileIndex = nextImageFileIndex;
+            nextImageFileIndex++;
+         }
          File imageFile = imageFiles[imageFileIndex];
          try
          {
