@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: TileSpace.java,v 1.1 2004-08-23 22:47:39 grlea Exp $
+// $Id: TileSpace.java,v 1.2 2004-08-27 01:18:30 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,9 +25,9 @@ import java.util.Collection;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-public class 
+public class
 TileSpace
 {
    private final int tileSize;
@@ -87,6 +87,18 @@ TileSpace
    getSize()
    {
       return new Dimension(width, height);
+   }
+
+   public int
+   getWidth()
+   {
+      return width;
+   }
+
+   public int
+   getHeight()
+   {
+      return height;
    }
 
    public int
