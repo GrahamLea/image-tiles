@@ -1,5 +1,5 @@
 
-                                 Image Tiles
+                                 Image  Tiles
 
                                  Version @VERSION@
 
@@ -79,6 +79,14 @@ The current immediate goals for Image Tiles are:
 
 
 CHANGE LOG
+
+0.3a
+
+   + The TileSpace is now centered on the drawing canvas
+   + DirectoryImageSource has more properties for controlling the order of images chosen
+   + Added ImageTilesHelper.chooseAppropriateTileSize(Component)
+   + Fixed transparent tile problem with PlainTileRenderer
+   + Added the Image Tiles screensaver 
 
 0.2a
 
