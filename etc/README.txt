@@ -82,5 +82,16 @@ CHANGE LOG
 
 0.2a
 
-   + Changed many things. :)
-
+   + Renamed Aniamtor to Transition
+   + Refactored Painter out into TileHolder (class) and TileHolderRenderer (interface)
+   + Animator.reset() is now Transition.newTransition(TileSet, TileSet, Chooser, TileHolder)
+   + Changed Placer interface from:
+        Point place(TileSet tileSet, BufferedImage sourceImage);
+     to
+        void  place(TileSet tileSet, BufferedImage sourceImage, Graphics targetGraphics);
+   + Moved scaling operations out of Scaler implementations and into Placer implementations
+   + Added DirectoryImageSource
+   + Added ImageTilesDefaults
+   + Added BackgroundPainter interface and implementations
+   + Pipeline now performs frame timing internally and FixedRateScheduler is gone
+   + Changed AnimationKit and RenderKit to be hidden classes rather than public interfaces
