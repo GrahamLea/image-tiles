@@ -1,12 +1,12 @@
 package org.grlea.imageTiles;
 
-import java.awt.Graphics2D;
-import java.awt.Dimension;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Arrays;
+import java.awt.Graphics2D;
 
-// $Id: AnimationController.java,v 1.1 2004-08-20 05:25:35 grlea Exp $
+// $Id: AnimationController.java,v 1.2 2004-08-23 04:53:25 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ import java.util.Iterator;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 AnimationController
@@ -40,9 +40,7 @@ AnimationController
 
    private final Painter painter;
 
-   private final Graphics2D targetGraphics;
-
-   private final List listeners;
+   private final List stateListeners;
 
    private boolean animationComplete = false;
 
@@ -62,16 +60,14 @@ AnimationController
    };
 
    public
-   AnimationController(TileSet tileSet, Chooser chooser, Animator animator, Painter painter,
-                       Graphics2D graphics)
+   AnimationController(TileSet tileSet, Chooser chooser, Animator animator, Painter painter)
    {
       this.tileSet = tileSet;
       this.chooser = chooser;
       renderedTileSource = new RenderedTileSourceImpl();
       this.animator = animator;
       this.painter = painter;
-      this.targetGraphics = graphics;
-      listeners = new ArrayList(2);
+      stateListeners = new ArrayList(2);
 
       animator.addListener(animatorListener);
    }
@@ -83,28 +79,28 @@ AnimationController
    }
 
    public void
-   addListener(AnimationControllerListener listener)
+   addStateListener(AnimationStateListener listener)
    {
-      listeners.add(listener);
+      stateListeners.add(listener);
    }
 
    public void
-   removeListener(AnimationControllerListener listener)
+   removeStateListener(AnimationStateListener listener)
    {
-      listeners.remove(listener);
+      stateListeners.remove(listener);
    }
 
    protected void
    notifyAnimationComplete()
    {
-      for (Iterator iter = listeners.iterator(); iter.hasNext();)
+      for (Iterator iter = stateListeners.iterator(); iter.hasNext();)
       {
-         ((AnimationControllerListener) iter.next()).animationComplete();
+         ((AnimationStateListener) iter.next()).animationComplete();
       }
    }
 
    public void
-   drawFrame()
+   advanceFrame()
    {
       if (animationComplete)
       {
@@ -115,12 +111,14 @@ AnimationController
       {
          painter.tick();
          animator.tick(renderedTileSource);
-
-         Dimension tileSetSize = tileSet.getSize();
-         targetGraphics.clearRect(0, 0, tileSetSize.width, tileSetSize.height);
-         painter.paint(targetGraphics);
-         animator.paint(targetGraphics);
       }
+   }
+
+   public void
+   paint(Graphics2D graphics2D)
+   {
+      painter.paint(graphics2D);
+      animator.paint(graphics2D);
    }
 
    private class
