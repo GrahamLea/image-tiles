@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.swing.easy;
 
-// $Id: BasicAnimatedTileCanvas.java,v 1.1 2004-08-23 22:47:57 grlea Exp $
+// $Id: BasicAnimatedTileCanvas.java,v 1.2 2004-08-24 05:00:58 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,7 +45,7 @@ import javax.swing.plaf.ComponentUI;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 BasicAnimatedTileCanvas
@@ -61,16 +61,22 @@ extends JComponent
    public
    BasicAnimatedTileCanvas(TileSpace tileSpace, ImageSource imageSource, TileRenderer renderer)
    {
-      this(tileSpace, imageSource, renderer, DEFAULT_FRAME_RATE);
+      this(tileSpace, imageSource, renderer, new SlideAnimator(tileSpace));
    }
 
    public
    BasicAnimatedTileCanvas(TileSpace tileSpace, ImageSource imageSource, TileRenderer renderer,
-                           int frameRate)
+                           Animator animator)
+   {
+      this(tileSpace, imageSource, renderer, animator, DEFAULT_FRAME_RATE);
+   }
+
+   public
+   BasicAnimatedTileCanvas(TileSpace tileSpace, ImageSource imageSource, TileRenderer renderer,
+                           Animator animator, int frameRate)
    {
       this.tileSpace = tileSpace;
       Painter painter = new StaticPainter(tileSpace);
-      Animator animator = new SlideAnimator(tileSpace);
       Placer placer = new CentrePlacer();
       RandomChooser chooser = new RandomChooser(tileSpace);
 
