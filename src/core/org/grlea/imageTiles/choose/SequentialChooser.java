@@ -4,7 +4,7 @@ import org.grlea.imageTiles.Chooser;
 import org.grlea.imageTiles.Tile;
 import org.grlea.imageTiles.TileSpace;
 
-// $Id: SequentialChooser.java,v 1.1 2004-08-23 22:47:40 grlea Exp $
+// $Id: SequentialChooser.java,v 1.2 2004-08-27 01:15:33 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ import org.grlea.imageTiles.TileSpace;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 SequentialChooser
@@ -64,5 +64,12 @@ implements Chooser
             row++;
          }
       }
+   }
+
+   public void
+   reset()
+   {
+      column = 0;
+      row = 0;
    }
 }

@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: Chooser.java,v 1.1 2004-08-23 22:47:36 grlea Exp $
+// $Id: Chooser.java,v 1.2 2004-08-27 01:15:33 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ package org.grlea.imageTiles;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface
 Chooser
@@ -31,4 +31,7 @@ Chooser
 
    public Tile
    getNextTile();
+
+   public void
+   reset();
 }

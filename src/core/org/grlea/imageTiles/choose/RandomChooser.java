@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.choose;
 
-// $Id: RandomChooser.java,v 1.1 2004-08-23 22:47:39 grlea Exp $
+// $Id: RandomChooser.java,v 1.2 2004-08-27 01:15:33 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,12 +26,14 @@ import java.util.Random;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 RandomChooser
 implements Chooser
 {
+   private final TileSpace tileSpace;
+
    private final ArrayList tiles;
 
    private final Random random = new Random(System.currentTimeMillis());
@@ -39,8 +41,9 @@ implements Chooser
    public
    RandomChooser(TileSpace tileSpace)
    {
+      this.tileSpace = tileSpace;
       tiles = new ArrayList(tileSpace.getColumns() * tileSpace.getRows());
-      tileSpace.getAllTiles(tiles);
+      reset();
    }
 
    public boolean
@@ -53,5 +56,12 @@ implements Chooser
    getNextTile()
    {
       return (Tile) tiles.remove(random.nextInt(tiles.size()));
+   }
+
+   public void
+   reset()
+   {
+      tiles.clear();
+      tileSpace.getAllTiles(tiles);
    }
 }
