@@ -22,6 +22,10 @@ The version must be 1.4 or above.
 
 INSTALL SCREENSAVER
 
-To install the Image Tiles screensaver on Windows, you need to extract all the files in the
-imageTiles-screensaver-win32.zip file into the 'system32' folder under your windows folder,
-e.g. C:\Windows\system32
+To install the Image Tiles screensaver on Windows, you need to extract the following files into the
+'system32' folder under your windows folder, e.g. C:\WINDOWS\system32 or C:\WINNT\system32:
+
+   imageTiles.scr
+   imageTiles-screensaver.jar
+   saverbeans-api.jar
+

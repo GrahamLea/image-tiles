@@ -26,3 +26,12 @@ JGoodies Looks Plastic Look & Feel
 Copyright (c) 2001-2004 JGoodies Karsten Lentzsch. All rights reserved.
 http://looks.dev.java.net/
 License: BSD-Style (see JGoodies_License.txt)
+
+	
+
+saverbeans-api.jar:
+
+JDIC Screensaver Development Kit
+Copyright (c) 2004 Sun Microsystems, Inc. All rights reserved.
+https://jdic.dev.java.net/documentation/incubator/screensaver/index.html
+License: LGPL
