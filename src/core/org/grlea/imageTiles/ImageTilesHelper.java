@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: ImageTilesHelper.java,v 1.4 2004-09-04 07:59:17 grlea Exp $
+// $Id: ImageTilesHelper.java,v 1.5 2005-03-31 21:20:36 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ import java.awt.image.BufferedImage;
  * <p>Methods to help in the set up of an Image Tiles TileSpace and Pipeline.</p>
  *
  * @author grlea
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class
 ImageTilesHelper
@@ -37,6 +37,21 @@ ImageTilesHelper
    {
       int width = image.getWidth();
       int height = image.getHeight();
+      int tileSize = (int) (Math.sqrt(Math.sqrt(width * height)) * 1.5);
+      return tileSize;
+   }
+
+   public static int
+   chooseAppropriateTileSize(Component component)
+   {
+      int width = component.getWidth();
+      int height = component.getHeight();
+
+      if (width == 0)
+         throw new IllegalStateException("Component width is 0");
+      if (height == 0)
+         throw new IllegalStateException("Component height is 0");
+
       int tileSize = (int) (Math.sqrt(Math.sqrt(width * height)) * 1.5);
       return tileSize;
    }
