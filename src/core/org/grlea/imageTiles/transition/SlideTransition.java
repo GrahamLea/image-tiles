@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.transition;
 
-// $Id: SlideTransition.java,v 1.1 2004-09-04 07:59:32 grlea Exp $
+// $Id: SlideTransition.java,v 1.2 2005-03-19 00:11:38 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,7 @@ import java.util.Random;
  * <p>A Transition that slides Tiles, from a random direction, toward their final position.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 SlideTransition
@@ -44,7 +44,7 @@ implements Transition
 {
    private static final int DEFAULT_ANIMATED_TILES = 5;
 
-   private static final int DEFAULT_SPEED = 7;
+   private static final int DEFAULT_SPEED = 500;
 
    private final Heading NORTH = new Heading(false, true);
    private final Heading SOUTH = new Heading(false, false);
@@ -64,6 +64,8 @@ implements Transition
    private final Random random;
 
    private TileHolder tileHolder;
+
+   private long unusedTimeFromPreviousFrames = 0;
 
    public
    SlideTransition()
@@ -94,10 +96,11 @@ implements Transition
       this.chooser = chooser;
       this.tileHolder = tileHolder;
       tileHolder.removeAllTiles();
+      unusedTimeFromPreviousFrames = 0;
    }
 
    public void
-   advanceFrame()
+   advanceFrame(long timeSinceLastFrame)
    {
       // Check for tiles that have arrived.
       for (Iterator iter = tileSliders.iterator(); iter.hasNext();)
@@ -129,10 +132,14 @@ implements Transition
          newTiles++;
       }
 
-      // Tick the TileSliders.
+      // Advance the TileSliders.
+      long timeElapsed = timeSinceLastFrame + unusedTimeFromPreviousFrames;
+      long timePerPixel = 1000 / speed;
+      int pixelsToAdvance = (int) (timeElapsed / timePerPixel);
+      unusedTimeFromPreviousFrames = timeElapsed % timePerPixel;
       for (Iterator iter = tileSliders.iterator(); iter.hasNext();)
       {
-         ((TileSlider) iter.next()).tick();
+         ((TileSlider) iter.next()).advance(pixelsToAdvance);
       }
    }
 
@@ -213,12 +220,20 @@ implements Transition
       }
 
       public void
-      decrease(Point offset)
+      decrease(Point offset, int pixels)
       {
          if (horizontal)
-            offset.x += (negative ? -speed : speed);
+         {
+            if (Math.abs(offset.x) < pixels)
+               pixels = Math.abs(offset.x);
+            offset.x += (negative ? -pixels : pixels);
+         }
          else
-            offset.y += (negative ? -speed : speed);
+         {
+            if (Math.abs(offset.y) < pixels)
+               pixels = Math.abs(offset.y);
+            offset.y += (negative ? -pixels : pixels);
+         }
       }
    }
 
@@ -246,9 +261,9 @@ implements Transition
       }
 
       public void
-      tick()
+      advance(int pixels)
       {
-         heading.decrease(offset);
+         heading.decrease(offset, pixels);
       }
 
       public void

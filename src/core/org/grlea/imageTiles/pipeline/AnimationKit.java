@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.pipeline;
 
-// $Id: AnimationKit.java,v 1.1 2004-09-04 07:59:25 grlea Exp $
+// $Id: AnimationKit.java,v 1.2 2005-03-19 00:11:37 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ import java.util.List;
  * <p>Object for keeping track of the animation of a Transition. Used internally by a Pipeline.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 class
 AnimationKit
@@ -100,7 +100,7 @@ AnimationKit
    }
 
    public void
-   advanceFrame()
+   advanceFrame(long timeSinceLastFrame)
    {
       if (transitionComplete)
       {
@@ -113,8 +113,8 @@ AnimationKit
       }
       else
       {
-         tileHolderRenderer.advanceFrame();
-         transition.advanceFrame();
+         tileHolderRenderer.advanceFrame(timeSinceLastFrame);
+         transition.advanceFrame(timeSinceLastFrame);
       }
    }
 }

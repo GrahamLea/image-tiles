@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.pipeline;
 
-// $Id: Pipeline.java,v 1.2 2004-09-04 07:59:26 grlea Exp $
+// $Id: Pipeline.java,v 1.3 2005-03-19 00:11:37 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,7 +41,7 @@ import javax.swing.Timer;
  * request rendering through the {@link #render} method.</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class
 Pipeline
@@ -65,6 +65,16 @@ Pipeline
    private final List frameListeners;
 
    private volatile boolean running = false;
+
+   private long startTime = 0;
+
+   private long lastFrameRateReportTime = 0;
+
+   private long frames = 0;
+
+   private long lastFrames = 0;
+
+   private long lastFrameAdvance = 0;
 
    public
    Pipeline(BufferedImage image)
@@ -162,6 +172,8 @@ Pipeline
    start()
    {
       this.running = true;
+      startTime = System.currentTimeMillis();
+      lastFrameAdvance = System.currentTimeMillis();
       timer.start();
    }
 
@@ -185,6 +197,10 @@ Pipeline
       // is being updated.
       synchronized (ANIMATION_LOCK)
       {
+         long currentTime = System.currentTimeMillis();
+         long timeSinceLastFrame = currentTime - lastFrameAdvance;
+         lastFrameAdvance = currentTime;
+
          if (createNewTileSet)
          {
             createNewTileSet = false;
@@ -216,10 +232,26 @@ Pipeline
          {
             // Advance the frame
 //            long startTime = System.currentTimeMillis();
-            components.animationKit.advanceFrame();
+            components.animationKit.advanceFrame(timeSinceLastFrame);
 //            long endTime = System.currentTimeMillis();
 //            long calculateFrameTime = endTime - startTime;
 //            System.out.println("calculateFrameTime = " + calculateFrameTime);
+         }
+      }
+
+      frames++;
+      long time = System.currentTimeMillis();
+      if (time - lastFrameRateReportTime > 1000)
+      {
+         long seconds = ((time - startTime) / 1000);
+         if (seconds != 0)
+         {
+            long frameRate = frames / seconds;
+            System.out.println("frameRate = " + frameRate);
+            long newFrames = frames - lastFrames;
+            System.out.println("newFrames = " + newFrames);
+            lastFrameRateReportTime = time;
+            lastFrames = frames;
          }
       }
    }

@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: TileHolderRenderer.java,v 1.1 2004-09-04 07:59:20 grlea Exp $
+// $Id: TileHolderRenderer.java,v 1.2 2005-03-19 00:11:36 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,14 +25,14 @@ import java.awt.Graphics2D;
  * within the Pipeline.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface
 TileHolderRenderer
 extends TileHolderListener
 {
    void
-   advanceFrame();
+   advanceFrame(long timeSinceLastFrame);
 
    void
    render(TileHolder tileHolder, Graphics2D graphics);

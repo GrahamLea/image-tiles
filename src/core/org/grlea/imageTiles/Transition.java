@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: Transition.java,v 1.1 2004-09-04 07:59:20 grlea Exp $
+// $Id: Transition.java,v 1.2 2005-03-19 00:11:37 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ import java.awt.Graphics2D;
  * their animation before animating the Tile from the new TileSet into place.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface
 Transition
@@ -40,7 +40,7 @@ Transition
    newTransition(TileSet oldTileSet, TileSet newTileSet, Chooser chooser, TileHolder tileHolder);
 
    public void
-   advanceFrame();
+   advanceFrame(long timeSinceLastFrame);
 
    public void
    render(Graphics2D graphics);
