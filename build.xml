@@ -50,7 +50,7 @@
    <property name="buildDir" value="${releaseDir}/build"/>
    <property name="wwwDir" value="www"/>
    <property name="wwwReleaseDir" value="${wwwDir}/release"/>
-   <property name="wwwJnlpDir" value="${wwwDir}/jnlp"/>
+<!--   <property name="wwwJnlpDir" value="${wwwDir}/jnlp"/>-->
 
    <property name="tempDir" value="${releaseDir}/temp"/>
    <property name="classes" value="${tempDir}/classes"/>
@@ -143,7 +143,7 @@
    <target name="CopyWwwArtefacts" depends="BuildRelease">
 
       <delete>
-         <fileset dir="${wwwReleaseDir}" includes="**"/> 
+         <fileset dir="${wwwReleaseDir}" includes="**"/>
       </delete>
       <copy todir="${wwwReleaseDir}">
          <fileset dir="${buildDir}">
@@ -158,28 +158,19 @@
          </fileset>
       </copy>
 
-      <delete>
-         <fileset dir="${wwwJnlpDir}" includes="**"/>
-      </delete>
-      <copy todir="${wwwJnlpDir}">
-         <fileset dir="${buildDir}">
-            <include name="${jar.core.name}"/>
-            <include name="${jar.swing.name}"/>
-            <include name="${jar.simpleDemo.name}"/>
-            <include name="${jar.inApplicationDemo.name}"/>
-         </fileset>
-      </copy>
-      <copy todir="${wwwJnlpDir}/lib">
-         <fileset dir="${wwwDir}/lib">
-            <include name="${lib.explicitLayout.name}"/>
-            <include name="${lib.explicitTableLayout.name}"/>
-            <include name="${lib.jgoodiesLooksPlastic.name}"/>
-         </fileset>
-      </copy>
+<!--      <copy todir="${wwwJnlpDir}">-->
+<!--         <fileset dir="${buildDir}">-->
+<!--            <include name="${jar.core.name}"/>-->
+<!--            <include name="${jar.swing.name}"/>-->
+<!--            <include name="${jar.simpleDemo.name}"/>-->
+<!--            <include name="${jar.inApplicationDemo.name}"/>-->
+<!--         </fileset>-->
+<!--      </copy>-->
 
-      <signjar alias="${keystore.alias}" storepass="${keystore.password}">
-         <fileset dir="${wwwJnlpDir}" includes="**"/>
-      </signjar>
+<!--      <signjar jar="${wwwJnlpDir}/${jar.core.name}" alias="grlea" storepass="" />-->
+<!--      <signjar jar="${wwwJnlpDir}/${jar.swing.name}" alias="grlea" storepass=""/>-->
+<!--      <signjar jar="${wwwJnlpDir}/${jar.simpleDemo.name}" alias="grlea" storepass=""/>-->
+<!--      <signjar jar="${wwwJnlpDir}/${jar.inApplicationDemo.name}" alias="grlea" storepass=""/>-->
 
    </target>
 
@@ -198,7 +189,7 @@
       <mkdir dir="${releaseDir}"/>
       <mkdir dir="${buildDir}"/>
       <mkdir dir="${javadocDir}"/>
-      <mkdir dir="${wwwJnlpDir}"/>
+<!--      <mkdir dir="${wwwJnlpDir}"/>-->
 
       <mkdir dir="${libDir}"/>
       <copy file="${lib.explicitLayout.dir}/${lib.explicitLayout.name}" todir="${libDir}"/>
