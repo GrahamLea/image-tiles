@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.transition;
 
-// $Id: SlideTransition.java,v 1.2 2005-03-19 00:11:38 grlea Exp $
+// $Id: SlideTransition.java,v 1.3 2005-03-31 21:25:24 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ import org.grlea.imageTiles.Tile;
 import org.grlea.imageTiles.TileSet;
 import org.grlea.imageTiles.TileHolder;
 import org.grlea.imageTiles.Transition;
+import org.grlea.imageTiles.TileSpace;
 import org.grlea.imageTiles.transition.AbstractTransition;
 
 import java.awt.Dimension;
@@ -35,7 +36,7 @@ import java.util.Random;
  * <p>A Transition that slides Tiles, from a random direction, toward their final position.</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class
 SlideTransition
@@ -187,20 +188,18 @@ implements Transition
          final int xOffset;
          final int yOffset;
 
-         Dimension tileSpaceSize = tileSet.getTileSpace().getSize();
+         TileSpace tileSpace = tileSet.getTileSpace();
+         Dimension tileSpaceSize = tileSpace.getSize();
+         int tileSize = tileSpace.getTileSize();
 
          if (horizontal)
          {
             yOffset = 0;
-            int tileX = tile.x;
 
             if (!negative)
-               xOffset = -(tileX + (speed - (tileX % speed)));
+               xOffset = -(tile.x + (tileSize * 2));
             else
-            {
-               int distanceToEdge = tileSpaceSize.width - tileX;
-               xOffset = distanceToEdge + (speed - (distanceToEdge % speed));
-            }
+               xOffset = (tileSpaceSize.width - tile.x) + tileSize;
          }
          else
          {
@@ -208,12 +207,9 @@ implements Transition
             int tileY = tile.y;
 
             if (!negative)
-               yOffset = -(tileY + (speed - (tileY % speed)));
+               yOffset = -(tile.y + (tileSize * 2));
             else
-            {
-               int distanceToEdge = tileSpaceSize.height - tileY;
-               yOffset = distanceToEdge + (speed - (distanceToEdge % speed));
-            }
+               yOffset = (tileSpaceSize.width - tile.y) + tileSize;
          }
 
          return new Point(xOffset, yOffset);
