@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: Painter.java,v 1.1 2004-08-23 22:47:37 grlea Exp $
+// $Id: Painter.java,v 1.2 2004-08-27 01:13:16 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@ import java.awt.Graphics2D;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface
 Painter
@@ -31,10 +31,13 @@ Painter
    addTile(RenderedTile renderedTile);
 
    void
-   tick();
+   removeAllTiles();
 
    void
-   paint(Graphics2D graphics);
+   advanceFrame();
+
+   void
+   render(Graphics2D graphics);
 
    void
    addListener(PainterListener listener);

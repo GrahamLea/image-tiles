@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.paint;
 
-// $Id: StaticPainter.java,v 1.1 2004-08-23 22:47:41 grlea Exp $
+// $Id: StaticPainter.java,v 1.2 2004-08-27 01:13:17 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,13 +22,14 @@ import org.grlea.imageTiles.TileSpace;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 StaticPainter
@@ -61,11 +62,26 @@ extends AbstractPainter
    }
 
    public void
-   tick()
+   removeAllTiles()
+   {
+      for (int row = 0; row < renderedTiles.length; row++)
+      {
+         RenderedTile[] renderedTileRow = renderedTiles[row];
+         for (int column = 0; column < renderedTileRow.length; column++)
+         {
+            renderedTileRow[column] = null;
+         }
+      }
+      graphics.setBackground(new Color(0, 0, 0, 0));
+      graphics.clearRect(0, 0, tileSpace.getWidth(), tileSpace.getHeight());
+   }
+
+   public void
+   advanceFrame()
    {}
 
    public void
-   paint(Graphics2D graphics)
+   render(Graphics2D graphics)
    {
       graphics.drawImage(image, 0, 0, null);
    }
