@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.demo;
 
-// $Id: SimplestDemo.java,v 1.2 2004-09-04 07:59:36 grlea Exp $
+// $Id: SimplestDemo.java,v 1.3 2004-09-05 23:10:55 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,7 @@ import javax.swing.SwingUtilities;
  * </pre></p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class 
 SimplestDemo
@@ -79,7 +79,7 @@ SimplestDemo
 
       AnimatedTileCanvas tileCanvas = new AnimatedTileCanvas(new Pipeline(image), true);
 
-      final JFrame frame = new JFrame("Image Tiles : SimplestAnimationDemo");
+      final JFrame frame = new JFrame("Image Tiles : SimplestDemo");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setResizable(false);
 
