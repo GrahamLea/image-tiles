@@ -16,9 +16,9 @@
 
   <resources>
      <j2se version="1.4+"/>
+     <jar href="release/imageTiles-simpleDemo.jar"/>
      <jar href="release/imageTiles-core.jar"/>
      <jar href="release/imageTiles-swing.jar"/>
-     <jar href="release/imageTiles-simpleDemo.jar"/>
   </resources>
 
   <application-desc main-class="org.grlea.imageTiles.demo.SimplestDemo"/>
