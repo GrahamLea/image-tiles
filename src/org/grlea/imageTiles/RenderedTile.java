@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: RenderedTile.java,v 1.1 2004-08-20 05:25:36 grlea Exp $
+// $Id: RenderedTile.java,v 1.2 2004-08-23 04:56:16 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ import java.awt.image.BufferedImage;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 RenderedTile
@@ -45,12 +45,6 @@ RenderedTile
       return tile;
    }
 
-   public BufferedImage
-   getImage()
-   {
-      return image;
-   }
-
    public void
    paint(Graphics2D graphics)
    {
@@ -61,5 +55,11 @@ RenderedTile
    paint(Graphics2D graphics, Point offset)
    {
       graphics.drawImage(image, tile.getX() + offset.x, tile.getY() + offset.y, null);
+   }
+
+   public void
+   paintAtOrigin(Graphics2D graphics)
+   {
+      graphics.drawImage(image, 0, 0, null);
    }
 }
