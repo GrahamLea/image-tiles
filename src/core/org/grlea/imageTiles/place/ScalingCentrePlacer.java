@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.place;
 
-// $Id: ScalingCentrePlacer.java,v 1.1 2004-09-04 07:59:28 grlea Exp $
+// $Id: ScalingCentrePlacer.java,v 1.2 2005-03-31 21:22:46 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import java.awt.image.BufferedImage;
  * can see the gaps between the pixels.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 ScalingCentrePlacer
@@ -52,9 +52,9 @@ implements Placer
     * Creates a new this with the specified up-scaling threshold.
     *
     * @param threshold a threshold on up-scaling, given as a maximum scale factor (i.e. 2.0 for a
-    * maximum of 2x scaling, 1.5 for a maximum of 1.5x, etc.). Use Integer.MAX_VALUE to scale to the
-    * full size of the TileSpace no matter the size of the image. Use 0 (zero) to perform
-    * down-scaling only.  
+    * maximum of 2x scaling, 1.5 for a maximum of 1.5x, etc.). Use {@link Float#POSITIVE_INFINITY}
+    * to scale to the * full size of the TileSpace no matter the size of the image. Use 0 (zero) to
+    * perform down-scaling only.
     */
    public
    ScalingCentrePlacer(float threshold)
