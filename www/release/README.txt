@@ -1,7 +1,7 @@
 
                                  Image  Tiles
 
-                                 Version 0.3a
+                                 Version 0.3b
 
                         http://image-tiles.dev.java.net/
 
@@ -59,14 +59,14 @@ The second option will print instructions to the console about the parameters Si
 
 STATUS
 
-Though considerable work has been completed since Image Tiles was first released publicly, it is
-still an alpha version. This is chiefly due to the fact that there are certain interactions within
-the framework that are undesirable and are likely to change in the near future.
 
-That being said, the changes that need to be made are mostly minor and all internal.
-This means that development using the components in the swing package is unlikely to change.
-Extensions to the framework may require a few semantic changes (method signatures and the like),
-however the structure and division of responsibilities is unlikely to change.
+Image Tiles is now in a beta version, having received an amount of refactoring and a medium level of
+testing. There are still some interactions that could be better abstracted, but major work on the
+internals will not continue unless specific requests are made by users.
+
+There are, on the other hand, an application or two still intended to be built on top of the API,
+and these will result new releases as they are completed. See the CURRENT GOALS section for a list
+of planned features.
 
 
 CURRENT GOALS
@@ -74,8 +74,8 @@ CURRENT GOALS
 The current immediate goals for Image Tiles are:
 
 * Full-screen slideshow
-* Screensaver
 * Configuration file format & GUI tools
+* New implementations of Transition and TileHolderRenderer
 
 
 CHANGE LOG
@@ -86,7 +86,7 @@ CHANGE LOG
    + DirectoryImageSource has more properties for controlling the order of images chosen
    + Added ImageTilesHelper.chooseAppropriateTileSize(Component)
    + Fixed transparent tile problem with PlainTileRenderer
-   + Added the Image Tiles screensaver 
+   + Added the Image Tiles screensaver
 
 0.2a
 
