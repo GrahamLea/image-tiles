@@ -136,13 +136,8 @@
    <target name="CopyWwwArtefacts" depends="BuildRelease">
 
       <delete>
-         <fileset dir="${wwwDir}" includes="*.jnlp"/>
+         <fileset dir="${wwwReleaseDir}" includes="**"/> 
       </delete>
-      <copy todir="${wwwDir}">
-         <fileset dir="${etcDir}" includes="*.jnlp"/>
-      </copy>
-
-      <delete dir="${wwwReleaseDir}" includeemptydirs="true"/>
       <copy todir="${wwwReleaseDir}">
          <fileset dir="${buildDir}">
             <include name="LICENSE.txt"/>
@@ -151,13 +146,9 @@
             <include name="imageTiles-swing.jar"/>
             <include name="imageTiles-simpleDemo.jar"/>
             <include name="imageTiles-inApplicationDemo.jar"/>
-            <include name="doc/**"/>
+            <include name="imageTiles-doc.zip"/>
+            <include name="imageTiles-src.zip"/>
          </fileset>
-      </copy>
-
-      <delete dir="${wwwDir}/lib" includeemptydirs="true"/>
-      <copy todir="${wwwDir}">
-         <fileset dir="${buildDir}" includes="lib/**"/>
       </copy>
 
    </target>
