@@ -93,10 +93,11 @@
 
    <!-- Outputs -->
    <!-- Directories-->
-   <property name="releaseDir" value="${basedir}/release/${product.version}"/>
+   <property name="releasesDir" value="release"/>
+   <property name="releaseDir" value="${releasesDir}/${product.version}"/>
    <property name="buildDir" value="${releaseDir}/build"/>
 
-   <property name="tempDir" value="build"/>
+   <property name="tempDir" value="${basedir}/${releaseDir}/temp"/>
    <property name="classes" value="${tempDir}/classes"/>
    <property name="classes.core" value="${classes}/core"/>
    <property name="classes.swing" value="${classes}/swing"/>
@@ -195,28 +196,28 @@
            depends="Init, CompileJavas-core, CompileJavas-swing, CompileJavas-simpleDemo, CompileJavas-inApplicationDemo">
    </target>
 
-   <target name="CompileJavas-core" depends="Init" if="core.build" >
+   <target name="CompileJavas-core" depends="Init" >
       <javac srcdir="${source.core}"
              classpathref="classpath.core"
              destdir="${classes.core}"
              includes="org/**/*.java"/>
    </target>
 
-   <target name="CompileJavas-swing" depends="Init, CompileJavas-core" if="swing.build" >
+   <target name="CompileJavas-swing" depends="Init, CompileJavas-core" >
       <javac srcdir="${source.swing}"
              classpathref="classpath.swing"
              destdir="${classes.swing}"
              includes="org/**/*.java"/>
    </target>
 
-   <target name="CompileJavas-simpleDemo" depends="Init, CompileJavas-swing" if="simpleDemo.build" >
+   <target name="CompileJavas-simpleDemo" depends="Init, CompileJavas-swing" >
       <javac srcdir="${source.demo}"
              classpathref="classpath.simpleDemo"
              destdir="${classes.simpleDemo}"
-         includes="org/grlea/imageTiles/demo/SimpleAnimationDemo.java"/>
+         includes="org/grlea/imageTiles/demo/Simple*.java"/>
    </target>
 
-   <target name="CompileJavas-inApplicationDemo" depends="Init, CompileJavas-swing" if="inApplicationDemo.build" >
+   <target name="CompileJavas-inApplicationDemo" depends="Init, CompileJavas-swing" >
       <javac srcdir="${source.demo}"
              classpathref="classpath.inApplicationDemo"
              destdir="${classes.inApplicationDemo}"
