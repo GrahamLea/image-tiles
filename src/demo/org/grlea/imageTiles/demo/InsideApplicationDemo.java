@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.demo;
 
-// $Id: InsideApplicationDemo.java,v 1.1 2004-08-23 22:47:44 grlea Exp $
+// $Id: InsideApplicationDemo.java,v 1.2 2004-08-24 04:56:19 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,18 +17,15 @@ package org.grlea.imageTiles.demo;
 
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
 import org.grlea.imageTiles.ImageSource;
-import org.grlea.imageTiles.TileSpace;
 import org.grlea.imageTiles.TileRenderer;
-import org.grlea.imageTiles.render.Decorator;
-import org.grlea.imageTiles.render.BevelEdgeDecorator;
-import org.grlea.imageTiles.render.RoundedCornerDecorator;
-import org.grlea.imageTiles.render.GlareDecorator;
-import org.grlea.imageTiles.render.DecorativeTileRenderer;
-import org.grlea.imageTiles.render.PlainTileRenderer;
+import org.grlea.imageTiles.TileSpace;
+import org.grlea.imageTiles.Animator;
+import org.grlea.imageTiles.animate.SlideAnimator;
 import org.grlea.imageTiles.imageSource.SequentialImageSource;
+import org.grlea.imageTiles.render.PlainTileRenderer;
 import org.grlea.imageTiles.swing.easy.BasicAnimatedTileCanvas;
-import org.pietschy.explicit.Align;
 import org.pietschy.explicit.TableBuilder;
+import org.pietschy.explicit.align.Align;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -54,7 +51,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 InsideApplicationDemo
@@ -64,6 +61,10 @@ extends JFrame
 
    private static final String[] INSTALLER_IMAGES =
       {"Installer Image Blue.gif", "Installer Image Red.gif", "Installer Image Green.gif"};
+
+   private static final int ANIMATED_TILES = 20;
+
+   private static final int ANIMATION_SPEED = 8;
 
    public
    InsideApplicationDemo()
@@ -80,7 +81,9 @@ extends JFrame
       TileSpace tileSpace = new TileSpace(16, 0, 10, 15);
       ImageSource imageSource = new SequentialImageSource(INSTALLER_IMAGES);
       TileRenderer renderer = new PlainTileRenderer();
-      BasicAnimatedTileCanvas tileCanvas = new BasicAnimatedTileCanvas(tileSpace, imageSource, renderer);
+      Animator animator = new SlideAnimator(tileSpace, ANIMATED_TILES, ANIMATION_SPEED);
+      BasicAnimatedTileCanvas tileCanvas =
+         new BasicAnimatedTileCanvas(tileSpace, imageSource, renderer, animator);
       tileCanvas.setBorder(BorderFactory.createEtchedBorder());
 
       JLabel stageProgressLabel = new JLabel("Copying files...");
@@ -96,7 +99,7 @@ extends JFrame
       totalProgressBar.setStringPainted(true);
 
       JComponent horizontalRule = new JComponent() {};
-      horizontalRule.setPreferredSize(new Dimension(2, 2));
+      horizontalRule.setPreferredSize(new Dimension(100, 2));
       horizontalRule.setBorder(BorderFactory.createEtchedBorder());
 
       JButton backButton = new JButton("< Back");
@@ -117,43 +120,44 @@ extends JFrame
       TableBuilder progressBuilder = new TableBuilder();
 //      progressBuilder.setBorder(BorderFactory.createEtchedBorder());
       int row = 0;
-      progressBuilder.add(Box.createVerticalStrut(10), row++, 0).alignX(Align.FILL);
-      progressBuilder.add(stageProgressLabel, row++, 0).alignX(Align.LEFT);
-      progressBuilder.add(stageProgressBar, row++, 0).alignX(Align.FILL);
-      progressBuilder.add(Box.createVerticalStrut(20), row++, 0).alignX(Align.FILL);
-      progressBuilder.add(totalProgressLabel, row++, 0).alignX(Align.LEFT);
-      progressBuilder.add(totalProgressBar, row++, 0).alignX(Align.FILL);
+      progressBuilder.add(Box.createVerticalStrut(10), row++, 0).fillX();
+      progressBuilder.add(stageProgressLabel, row++, 0).alignLeft();
+      progressBuilder.add(stageProgressBar, row++, 0).fillX();
+      progressBuilder.add(Box.createVerticalStrut(20), row++, 0).fillX();
+      progressBuilder.add(totalProgressLabel, row++, 0).alignLeft();
+      progressBuilder.add(totalProgressBar, row++, 0).fillX();
       progressBuilder.column(0).grow(1);
-      progressBuilder.applyLayout();
+      progressBuilder.buildLayout();
       JPanel progressPanel = progressBuilder.getPanel();
 
       // Layout: Middle Panel
       TableBuilder middleBuilder = new TableBuilder();
-      middleBuilder.add(tileCanvas, 0, 0).alignX(Align.FILL).alignY(Align.FILL);
-      middleBuilder.add(progressPanel, 0, 1).alignX(Align.FILL).alignY(Align.FILL);
+      middleBuilder.add(tileCanvas, 0, 0).fillX().fillY();
+      middleBuilder.add(progressPanel, 0, 1).fillX().fillY();
       middleBuilder.row(0).grow(1);
       middleBuilder.column(1).grow(1);
-      middleBuilder.applyLayout();
+      middleBuilder.buildLayout();
       JPanel middlePanel = middleBuilder.getPanel();
 
       // Layout: Navigation Buttons
       TableBuilder navigationBuilder = new TableBuilder();
       navigationBuilder.add(backButton, 0, 0);
-      navigationBuilder.add(nextButton, 0, 1).getFirstColumn().paddingLeft(0);
+      navigationBuilder.add(nextButton, 0, 1);
+      navigationBuilder.column(1).paddingLeft(0);
       navigationBuilder.add(Box.createHorizontalStrut(10), 0, 3);
       navigationBuilder.add(cancelButton, 0, 4);
-      navigationBuilder.applyLayout();
+      navigationBuilder.buildLayout();
       JPanel navigationPanel = navigationBuilder.getPanel();
 
       // Layout: Main Panel
       TableBuilder mainBuilder = new TableBuilder();
-      mainBuilder.add(headerLabel, 0, 0).alignX(Align.FILL).alignY(Align.TOP);
-      mainBuilder.add(middlePanel, 1, 0).alignX(Align.FILL).alignY(Align.FILL);
-      mainBuilder.add(horizontalRule, 2, 0).alignX(Align.FILL).alignY(Align.CENTRE);
-      mainBuilder.add(navigationPanel, 3, 0).alignX(Align.RIGHT).alignY(Align.BOTTOM);
+      mainBuilder.add(headerLabel, 0, 0).fillX().alignTop();
+      mainBuilder.add(middlePanel, 1, 0).fillX().fillY();
+      mainBuilder.add(horizontalRule, 2, 0).alignX(Align.FILL).alignCentre();
+      mainBuilder.add(navigationPanel, 3, 0).alignRight().alignBottom();
       mainBuilder.row(1).grow(1);
       mainBuilder.column(0).grow(1);
-      mainBuilder.applyLayout();
+      mainBuilder.buildLayout();
       JPanel mainPanel = mainBuilder.getPanel();
 
       getContentPane().add(mainPanel);
