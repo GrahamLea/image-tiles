@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.demo;
 
-// $Id: InsideApplicationDemo.java,v 1.2 2004-08-24 04:56:19 grlea Exp $
+// $Id: InsideApplicationDemo.java,v 1.3 2004-08-24 07:12:35 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,17 +16,17 @@ package org.grlea.imageTiles.demo;
 // limitations under the License.
 
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
+import org.grlea.imageTiles.Animator;
 import org.grlea.imageTiles.ImageSource;
 import org.grlea.imageTiles.TileRenderer;
 import org.grlea.imageTiles.TileSpace;
-import org.grlea.imageTiles.Animator;
 import org.grlea.imageTiles.animate.SlideAnimator;
 import org.grlea.imageTiles.imageSource.SequentialImageSource;
 import org.grlea.imageTiles.render.PlainTileRenderer;
 import org.grlea.imageTiles.swing.easy.BasicAnimatedTileCanvas;
 import org.pietschy.explicit.TableBuilder;
-import org.pietschy.explicit.align.Align;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,11 +39,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JSeparator;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -51,7 +51,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class
 InsideApplicationDemo
@@ -84,7 +84,8 @@ extends JFrame
       Animator animator = new SlideAnimator(tileSpace, ANIMATED_TILES, ANIMATION_SPEED);
       BasicAnimatedTileCanvas tileCanvas =
          new BasicAnimatedTileCanvas(tileSpace, imageSource, renderer, animator);
-      tileCanvas.setBorder(BorderFactory.createEtchedBorder());
+//      tileCanvas.setBorder(BorderFactory.createEtchedBorder());
+      tileCanvas.setBorder(BorderFactory.createLineBorder(Color.black));
 
       JLabel stageProgressLabel = new JLabel("Copying files...");
       JLabel totalProgressLabel = new JLabel("Total:");
@@ -98,9 +99,9 @@ extends JFrame
       totalProgressBar.setValue(80);
       totalProgressBar.setStringPainted(true);
 
-      JComponent horizontalRule = new JComponent() {};
-      horizontalRule.setPreferredSize(new Dimension(100, 2));
-      horizontalRule.setBorder(BorderFactory.createEtchedBorder());
+      JSeparator separator = new JSeparator();
+      separator.setBackground(Color.red);
+      separator.setPreferredSize(new Dimension(400, 10));
 
       JButton backButton = new JButton("< Back");
       JButton nextButton = new JButton("Next >");
@@ -153,7 +154,8 @@ extends JFrame
       TableBuilder mainBuilder = new TableBuilder();
       mainBuilder.add(headerLabel, 0, 0).fillX().alignTop();
       mainBuilder.add(middlePanel, 1, 0).fillX().fillY();
-      mainBuilder.add(horizontalRule, 2, 0).alignX(Align.FILL).alignCentre();
+      mainBuilder.row(1).paddingTop(2);
+      mainBuilder.add(separator, 2, 0).fillX().alignMiddle();
       mainBuilder.add(navigationPanel, 3, 0).alignRight().alignBottom();
       mainBuilder.row(1).grow(1);
       mainBuilder.column(0).grow(1);
