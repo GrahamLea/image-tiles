@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.swing.easy;
 
-// $Id: BasicAnimatedTileCanvas.java,v 1.2 2004-08-24 05:00:58 grlea Exp $
+// $Id: BasicAnimatedTileCanvas.java,v 1.3 2004-08-24 07:13:24 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +35,7 @@ import org.grlea.imageTiles.render.RoundedCornerDecorator;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Graphics;
+import java.awt.Insets;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -45,9 +46,9 @@ import javax.swing.plaf.ComponentUI;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
-public class 
+public class
 BasicAnimatedTileCanvas
 extends JComponent
 {
@@ -106,13 +107,20 @@ extends JComponent
    public Dimension
    getPreferredSize()
    {
-      return tileSpace.getSize();
+      Insets borderInsets = getBorder().getBorderInsets(this);
+      Dimension size = tileSpace.getSize();
+      size.width += borderInsets.left + borderInsets.right + 2;
+      size.height += borderInsets.top + borderInsets.bottom;
+      return size;
    }
 
    public void
    start()
    {
+      Insets borderInsets = getBorder().getBorderInsets(this);
       Graphics2D graphics = (Graphics2D) getGraphics();
+      graphics.translate(borderInsets.left, borderInsets.top);
       pipeline.start(graphics);
+//      graphics.translate(-borderInsets.left, -borderInsets.top);
    }
 }
