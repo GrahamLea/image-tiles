@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: TileSet.java,v 1.1 2004-08-20 05:25:37 grlea Exp $
+// $Id: TileSet.java,v 1.2 2004-08-23 22:32:45 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ import java.awt.image.BufferedImage;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 TileSet
@@ -38,6 +38,7 @@ TileSet
    private final TileRenderer renderer;
 
    // TODO (grahaml) Add "paintEmptyTiles" parameter ?
+   // TODO (grahaml) Remove imagePosition in place of a Placer.
    public
    TileSet(TileSpace tileSpace, BufferedImage image, Point imagePosition, TileRenderer renderer)
    {
