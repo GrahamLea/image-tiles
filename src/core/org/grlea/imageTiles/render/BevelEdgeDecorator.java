@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.render;
 
-// $Id: BevelEdgeDecorator.java,v 1.1 2004-08-23 22:47:41 grlea Exp $
+// $Id: BevelEdgeDecorator.java,v 1.2 2004-08-27 01:15:00 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import java.awt.image.BufferedImage;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 BevelEdgeDecorator
@@ -76,6 +76,7 @@ implements Decorator
       Graphics2D graphics = (Graphics2D) tileImage.getGraphics();
 
       Paint originalPaint = graphics.getPaint();
+      Stroke originalStroke = graphics.getStroke();
       graphics.setStroke(lineType);
 
       graphics.setPaint(highlightColour);
@@ -91,5 +92,6 @@ implements Decorator
       }
 
       graphics.setPaint(originalPaint);
+      graphics.setStroke(originalStroke);
    }
 }
