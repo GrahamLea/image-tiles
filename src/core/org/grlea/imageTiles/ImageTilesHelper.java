@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: ImageTilesHelper.java,v 1.1 2004-08-23 22:47:37 grlea Exp $
+// $Id: ImageTilesHelper.java,v 1.2 2004-08-27 01:14:11 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +15,6 @@ package org.grlea.imageTiles;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import org.grlea.imageTiles.swing.AnimatedTileCanvas;
-
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -25,9 +23,9 @@ import java.awt.image.BufferedImage;
  * <p></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-public class 
+public class
 ImageTilesHelper
 {
    private
@@ -97,12 +95,5 @@ ImageTilesHelper
       while (imageSpaceHeight < image.getHeight());
 
       return new TileSpace(tileSize, gapSize, columns, rows);
-   }
-
-   public AnimatedTileCanvas
-   createAnimatedTileCanvas(BufferedImage image)
-   {
-      // TODO (grahaml) Implement
-      throw new UnsupportedOperationException("Not implemented."); 
    }
 }
