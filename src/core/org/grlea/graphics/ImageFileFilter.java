@@ -1,6 +1,6 @@
 package org.grlea.graphics;
 
-// $Id: ImageFileFilter.java,v 1.1 2004-08-29 22:26:26 grlea Exp $
+// $Id: ImageFileFilter.java,v 1.2 2005-03-31 11:54:31 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ import javax.swing.filechooser.FileFilter;
  * <p>A file filter that 'accepts' all image types known to the {@link ImageIO} system.</p>
  *
  * @author Graham Lea (<a href="mailto:grlea@dev.java.net">grlea@dev.java.net</a>)
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 ImageFileFilter
@@ -81,9 +81,6 @@ implements java.io.FileFilter
    public boolean
    accept(File file)
    {
-      if (file.isDirectory())
-         return true;
-
       String filename = file.getName();
       int lastPeriod = filename.lastIndexOf('.');
       if (lastPeriod == -1)
