@@ -17,6 +17,7 @@
    <property name="source.core" value="${sourceDir}/core"/>
    <property name="source.swing" value="${sourceDir}/swing"/>
    <property name="source.demo" value="${sourceDir}/demo"/>
+   <property name="source.screensaver" value="${sourceDir}/screensaver"/>
 
    <!-- Files -->
    <property name="manifest.core" value="${etcDir}/Manifest-core.mf"/>
@@ -58,6 +59,7 @@
    <property name="classes.swing" value="${classes}/swing"/>
    <property name="classes.simpleDemo" value="${classes}/simpleDemo"/>
    <property name="classes.inApplicationDemo" value="${classes}/inApplicationDemo"/>
+   <property name="classes.screensaver" value="${classes}/screensaver"/>
    <property name="docDir" value="${buildDir}/doc"/>
    <property name="javadocDir" value="${docDir}/api"/>
 
@@ -101,6 +103,18 @@
       </fileset>
    </path>
 
+   <path id="classpath.screensaver">
+      <path refid="classpath.core"/>
+      <path refid="classpath.swing"/>
+      <dirset dir="." >
+         <include name="${classes.core}"/>
+         <include name="${classes.swing}"/>
+      </dirset>
+      <fileset dir="." >
+         <include name="${libDir}/${lib.saverbeans.name}"/>
+      </fileset>
+   </path>
+
    <path id="classpath.all">
       <path refid="classpath.core"/>
       <path refid="classpath.swing"/>
@@ -113,10 +127,22 @@
    <property name="jar.swing.name" value="${ant.project.name}-swing.jar"/>
    <property name="jar.simpleDemo.name" value="${ant.project.name}-simpleDemo.jar"/>
    <property name="jar.inApplicationDemo.name" value="${ant.project.name}-inApplicationDemo.jar"/>
+   <property name="jar.screensaver.name" value="${ant.project.name}-screensaver.jar"/>
    <property name="jar.core" value="${buildDir}/${jar.core.name}"/>
    <property name="jar.swing" value="${buildDir}/${jar.swing.name}"/>
    <property name="jar.simpleDemo" value="${buildDir}/${jar.simpleDemo.name}"/>
    <property name="jar.inApplicationDemo" value="${buildDir}/${jar.inApplicationDemo.name}"/>
+
+   <property name="jar.screensaver" value="${buildDir}/${jar.screensaver.name}"/>
+   <property name="screensaver.name" value="imageTiles"/>
+   <property name="screensaver.xml.name" value="${screensaver.name}.xml"/>
+   <property name="screensaver.xml" value="${etcDir}/screensaver/${screensaver.xml.name}"/>
+   <property name="screensaver.scr.name" value="${screensaver.name}.scr"/>
+   <property name="screensaver.scr" value="${buildDir}/${screensaver.scr.name}"/>
+   <property name="saverbeans.api" value="${etcDir}/screensaver/saverbeans-api.jar"/>
+   <property name="saverbeans.licence" value="${etcDir}/screensaver/SaverBeans_API_Licence.txt"/>
+   <property name="readme.win" value="${etcDir}/screensaver/README-win.txt"/>
+   <property name="readme.unix" value="${etcDir}/screensaver/README-unix.txt"/>
 
    <!-- Zips -->
    <property name="sourceZipName" value="${ant.project.name}-src.zip"/>
@@ -185,6 +211,7 @@
       <mkdir dir="${classes.swing}"/>
       <mkdir dir="${classes.simpleDemo}"/>
       <mkdir dir="${classes.inApplicationDemo}"/>
+      <mkdir dir="${classes.screensaver}"/>
 
       <mkdir dir="${releaseDir}"/>
       <mkdir dir="${buildDir}"/>
@@ -195,6 +222,7 @@
       <copy file="${lib.explicitLayout.dir}/${lib.explicitLayout.name}" todir="${libDir}"/>
       <copy file="${lib.explicitTableLayout.dir}/${lib.explicitTableLayout.name}" todir="${libDir}"/>
       <copy file="${lib.jgoodiesLooksPlastic.dir}/${lib.jgoodiesLooksPlastic.name}" todir="${libDir}"/>
+      <copy file="${lib.saverbeans.dir}/${lib.saverbeans.name}" todir="${libDir}"/>
    </target>
 
    <target name="Clean">
@@ -203,7 +231,7 @@
    </target>
 
    <target name="BuildCodeJars"
-           depends="BuildCodeJar-core, BuildCodeJar-swing, BuildCodeJar-simpleDemo, BuildCodeJar-inApplicationDemo">
+           depends="BuildCodeJar-core, BuildCodeJar-swing, BuildCodeJar-simpleDemo, BuildCodeJar-inApplicationDemo, BuildCodeJar-screensaver">
    </target>
 
    <target name="BuildCodeJar-core" depends="CompileJavas-core, CopyResources-core">
@@ -238,9 +266,18 @@
          includes="**"/>
    </target>
 
+   <target name="BuildCodeJar-screensaver"
+           depends="BuildCodeJar-core, BuildCodeJar-swing, CompileJavas-screensaver, CopyResources-screensaver">
+      <jar jarfile="${jar.screensaver}">
+         <fileset dir="${classes.screensaver}" includes="**"/>
+         <fileset dir="${classes.core}" includes="org/**"/>
+         <fileset dir="${classes.swing}" includes="org/**"/>
+      </jar>
+   </target>
+
 
    <target name="CompileJavas"
-           depends="Init, CompileJavas-core, CompileJavas-swing, CompileJavas-simpleDemo, CompileJavas-inApplicationDemo">
+           depends="Init, CompileJavas-core, CompileJavas-swing, CompileJavas-simpleDemo, CompileJavas-inApplicationDemo, CompileJavas-screensaver">
    </target>
 
    <target name="CompileJavas-core" depends="Init" >
@@ -269,6 +306,13 @@
              classpathref="classpath.inApplicationDemo"
              destdir="${classes.inApplicationDemo}"
              includes="org/grlea/imageTiles/demo/InsideApplicationDemo.java"/>
+   </target>
+
+   <target name="CompileJavas-screensaver" depends="Init, CompileJavas-core, CompileJavas-swing" >
+      <javac srcdir="${source.screensaver}"
+             classpathref="classpath.screensaver"
+             destdir="${classes.screensaver}"
+             includes="org/grlea/imageTiles/screensaver/*.java"/>
    </target>
 
    <target name="CopyResources-core" depends="CopyDocuments" >
@@ -306,6 +350,90 @@
             <include name="images/*.gif"/>
          </fileset>
       </copy>
+   </target>
+
+   <target name="CopyResources-screensaver" depends="CopyDocuments" >
+      <copy todir="${classes.screensaver}" >
+         <fileset dir="${buildDir}" includes="${licenseFileName},${readmeFileName},${versionFileName}"/>
+      </copy>
+
+      <copy todir="${classes.screensaver}">
+         <fileset dir="${source.demo}">
+            <include name="images/George.jpg"/>
+         </fileset>
+      </copy>
+   </target>
+
+   <target name="checkSaverbeansPath"
+           description="Check to make sure the saverbeans.path property is set">
+     <fail unless="saverbeans.path">
+       Property saverbeans.path not found.  Please copy
+       build.properties.sample to build.properties and
+       follow the instructions in that file.
+     </fail>
+     <available file="${saverbeans.path}" property="saverbeans.present" />
+     <fail unless="saverbeans.present">
+       Property saverbeans.path is invalid.  Please set
+       it to the installation path of the SaverBeans SDK.
+     </fail>
+   </target>
+
+   <target name="DefineTasks-screensaver" description="Define the screensaver custom task">
+     <taskdef name="createScreensavers"
+       classname="org.jdesktop.jdic.screensaver.autogen.ForEachScreensaver"
+       classpath="${saverbeans.path}/saverbeans-ant.jar" />
+   </target>
+
+   <target name="Create-screensaver"
+           depends="checkSaverbeansPath, DefineTasks-screensaver, BuildCodeJar-screensaver, CopyDocuments"
+           description="Creates screensavers">
+
+      <property name="screensaver-build-win32" value="${buildDir}/screensaver/win32"/>
+      <property name="screensaver-build-unix" value="${buildDir}/screensaver/unix"/>
+
+      <mkdir dir="${screensaver-build-win32}"/>
+      <mkdir dir="${screensaver-build-unix}"/>
+
+      <!-- Generate Makefile and Unix source distribution for each -->
+      <createScreensavers confDir="${etcDir}/screensaver" outDir="${screensaver-build-unix}" os="unix" />
+      <!-- Generate Windows .scr and binary distribution for each -->
+      <createScreensavers confDir="${etcDir}/screensaver" outDir="${screensaver-build-win32}" os="win32" />
+
+      <!-- Windows ZIP Contents -->
+      <copy todir="${screensaver-build-win32}" file="${jar.screensaver}" />
+      <copy todir="${screensaver-build-win32}" file="${buildDir}/${licenseFileName}"/>
+      <copy tofile="${screensaver-build-win32}/README.txt" file="${readme.win}">
+         <filterset>
+            <filter token="VERSION" value="${product.version}" />
+          </filterset>
+      </copy>
+      <copy todir="${screensaver-build-win32}" file="${saverbeans.licence}" />
+      <copy todir="${screensaver-build-win32}" file="${saverbeans.api}" />
+
+      <zip zipfile="${releaseDir}/imageTiles-screensaver-win32.zip">
+         <fileset dir="${screensaver-build-win32}">
+            <include name="**"/>
+         </fileset>
+      </zip>
+
+      <!-- Unix ZIP Contents -->
+      <copy todir="${screensaver-build-unix}" file="${jar.screensaver}" />
+      <copy todir="${screensaver-build-unix}" file="${screensaver.xml}" />
+      <copy todir="${screensaver-build-unix}" file="${buildDir}/${licenseFileName}"/>
+      <copy tofile="${screensaver-build-unix}/README.txt" file="${readme.unix}">
+         <filterset>
+            <filter token="VERSION" value="${product.version}" />
+          </filterset>
+      </copy>
+      <copy todir="${screensaver-build-unix}" file="${saverbeans.licence}" />
+      <copy todir="${screensaver-build-unix}" file="${saverbeans.api}" />
+
+      <zip zipfile="${releaseDir}/imageTiles-screensaver-unix.zip">
+         <fileset dir="${screensaver-build-unix}">
+            <include name="**"/>
+         </fileset>
+      </zip>
+
    </target>
 
    <target name="BuildSourceZip" depends="Init">
@@ -362,6 +490,7 @@
                <include name="${source.core}"/>
                <include name="${source.swing}"/>
                <include name="${source.demo}"/>
+               <include name="${source.screensaver}"/>
             </dirset>
          </sourcepath>
 
@@ -384,6 +513,10 @@
 
          <group title="Demonstration Applications">
             <package name="org.grlea.imageTiles.demo"/>
+         </group>
+
+         <group title="Screensaver">
+            <package name="org.grlea.imageTiles.screensaver"/>
          </group>
 
          <header>
