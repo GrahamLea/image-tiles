@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.swing;
 
-// $Id: ComponentPipelineRenderer.java,v 1.1 2004-09-04 07:59:38 grlea Exp $
+// $Id: ComponentPipelineRenderer.java,v 1.2 2005-04-01 02:29:40 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ import java.awt.image.VolatileImage;
  * @see VolatileImage
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 ComponentPipelineRenderer
@@ -45,17 +45,17 @@ ComponentPipelineRenderer
    render(Pipeline pipeline, Component component, Graphics2D targetGraphics)
    {
       if (bufferImage == null)
-         createBuffer(pipeline.getComponents().getTileSpace(), component);
+         createBuffer(component);
 
       do
       {
          // VolatileImage handling code courtesy of the legendary Chet Haase
          int validateCode = bufferImage.validate(component.getGraphicsConfiguration());
          if (validateCode == VolatileImage.IMAGE_INCOMPATIBLE)
-            createBuffer(pipeline.getComponents().getTileSpace(), component);
+            createBuffer(component);
 
          Graphics2D bufferGraphics = bufferImage.createGraphics();
-         pipeline.render(bufferGraphics);
+         pipeline.render(bufferGraphics, component);
          bufferGraphics.dispose();
          bufferGraphics = null;
 
@@ -65,13 +65,13 @@ ComponentPipelineRenderer
    }
 
    private void
-   createBuffer(TileSpace tileSpace, Component component)
+   createBuffer(Component component)
    {
       if (bufferImage != null)
       {
          bufferImage.flush();
          bufferImage = null;
       }
-      bufferImage = component.createVolatileImage(tileSpace.getWidth(), tileSpace.getHeight());
+      bufferImage = component.createVolatileImage(component.getWidth(), component.getHeight());
    }
 }

@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.swing;
 
-// $Id: CanvasPipelineRenderer.java,v 1.1 2004-09-04 07:59:37 grlea Exp $
+// $Id: CanvasPipelineRenderer.java,v 1.2 2005-04-01 02:29:40 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,7 @@ import java.awt.image.BufferStrategy;
  * @see BufferStrategy
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 CanvasPipelineRenderer
@@ -55,7 +55,7 @@ CanvasPipelineRenderer
       }
 
       Graphics graphics = bufferStrategy.getDrawGraphics();
-      pipeline.render((Graphics2D) graphics);
+      pipeline.render((Graphics2D) graphics, canvas);
       graphics.dispose();
       graphics = null;
       bufferStrategy.show();
