@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.demo;
 
-// $Id: InsideApplicationDemo.java,v 1.4 2004-08-27 01:20:12 grlea Exp $
+// $Id: InsideApplicationDemo.java,v 1.5 2004-09-04 07:59:36 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,13 +16,15 @@ package org.grlea.imageTiles.demo;
 // limitations under the License.
 
 import com.jgoodies.plaf.plastic.PlasticLookAndFeel;
-import org.grlea.imageTiles.Animator;
-import org.grlea.imageTiles.pipeline.ImageSource;
-import org.grlea.imageTiles.TileRenderer;
 import org.grlea.imageTiles.TileSpace;
-import org.grlea.imageTiles.animate.SlideAnimator;
-import org.grlea.imageTiles.pipeline.imageSource.SequentialImageSource;
-import org.grlea.imageTiles.render.PlainTileRenderer;
+import org.grlea.imageTiles.Transition;
+import org.grlea.imageTiles.BackgroundPainter;
+import org.grlea.imageTiles.background.LastTileSetBackgroundPainter;
+import org.grlea.imageTiles.transition.SlideTransition;
+import org.grlea.imageTiles.ImageSource;
+import org.grlea.imageTiles.pipeline.Pipeline;
+import org.grlea.imageTiles.pipeline.PipelineComponents;
+import org.grlea.imageTiles.imageSource.SequentialImageSource;
 import org.grlea.imageTiles.swing.AnimatedTileIcon;
 import org.pietschy.explicit.TableBuilder;
 
@@ -49,25 +51,54 @@ import javax.swing.JSeparator;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.EtchedBorder;
 
 /**
- * <p></p>
+ * <p>A make-believe installer window demonstrating how to embed an Image Tiles pipeline within a
+ * GUI.</p>
+ *
+ * <p>This class demonstrates the use of:
+ * <ul>
+ * <li>{@link AnimatedTileIcon}</li>
+ * <li>{@link SequentialImageSource}</li>
+ * <li>{@link LastTileSetBackgroundPainter}</li>
+ * <li>{@link SlideTransition} (custom animation speed)</li>
+ * </ul></p>
+ *
+ * <p>The Image-Tiles code in this class is:<pre>
+   private static final String[] INSTALLER_IMAGES =
+      {"Installer Image Blue.gif", "Installer Image Red.gif", "Installer Image Green.gif"};
+
+   ...
+
+      TileSpace tileSpace = new TileSpace(16, 0, 10, 15);
+      ImageSource imageSource = new SequentialImageSource(INSTALLER_IMAGES);
+      Transition transition = new SlideTransition(30);
+      LastTileSetBackgroundPainter backgroundPainter = new LastTileSetBackgroundPainter();
+      PipelineComponents components =
+         new PipelineComponents(tileSpace, imageSource, null, null, null, backgroundPainter, null,
+                                transition);
+      Pipeline pipeline = new Pipeline(components);
+      pipeline.addTransitionListener(backgroundPainter);
+
+      JLabel animatedTileLabel = new JLabel();
+      animatedTileIcon = new AnimatedTileIcon(animatedTileLabel, pipeline, true);
+      animatedTileLabel.setIcon(animatedTileIcon);
+ * </pre></p>
  *
  * @author grlea
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class
 InsideApplicationDemo
 extends JFrame
 {
-   private static final String INSTALLER_HEADER_IMAGE = "Installer Header.jpg";
+   private static final String INSTALLER_HEADER_IMAGE = "images/Installer Header.jpg";
 
    private static final String[] INSTALLER_IMAGES =
-      {"Installer Image Blue.gif", "Installer Image Red.gif", "Installer Image Green.gif"};
-
-   private static final int ANIMATED_TILES = 10;
-
-   private static final int ANIMATION_SPEED = 5;
+      {"images/Installer Image Blue.gif",
+       "images/Installer Image Red.gif",
+       "images/Installer Image Green.gif"};
 
    private final AnimatedTileIcon animatedTileIcon;
 
@@ -85,13 +116,20 @@ extends JFrame
 
       TileSpace tileSpace = new TileSpace(16, 0, 10, 15);
       ImageSource imageSource = new SequentialImageSource(INSTALLER_IMAGES);
-      TileRenderer renderer = new PlainTileRenderer();
-      Animator animator = new SlideAnimator(tileSpace, ANIMATED_TILES, ANIMATION_SPEED);
+      Transition transition = new SlideTransition(30);
+      LastTileSetBackgroundPainter backgroundPainter = new LastTileSetBackgroundPainter();
+      PipelineComponents components =
+         new PipelineComponents(tileSpace, imageSource, null, null, null, backgroundPainter, null,
+                                transition);
+      Pipeline pipeline = new Pipeline(components);
+      pipeline.addTransitionListener(backgroundPainter);
+
       JLabel animatedTileLabel = new JLabel();
-      animatedTileIcon =
-         new AnimatedTileIcon(animatedTileLabel, tileSpace, imageSource, renderer, animator);
+      animatedTileIcon = new AnimatedTileIcon(animatedTileLabel, pipeline, true);
       animatedTileLabel.setIcon(animatedTileIcon);
-      animatedTileLabel.setBorder(BorderFactory.createLineBorder(Color.black));
+      animatedTileLabel.setBorder(
+         BorderFactory.createCompoundBorder(
+            BorderFactory.createEtchedBorder(), BorderFactory.createEmptyBorder(0, 0, 1, 1)));
 
       JLabel stageProgressLabel = new JLabel("Copying files...");
       JLabel totalProgressLabel = new JLabel("Total:");
@@ -173,14 +211,7 @@ extends JFrame
       setResizable(false);
       setLocationRelativeTo(null);
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      addWindowListener(new WindowAdapter()
-      {
-         public void
-         windowClosing(WindowEvent e)
-         {
-            animatedTileIcon.stop();
-         }
-      });
+
    }
 
    public static void
@@ -197,13 +228,5 @@ extends JFrame
             demo.setVisible(true);
          }
       });
-
-      try
-      {
-         Thread.sleep(2000);
-      }
-      catch (InterruptedException ie)
-      {}
-      demo.animatedTileIcon.start();
    }
 }

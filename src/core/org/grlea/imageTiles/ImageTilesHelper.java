@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: ImageTilesHelper.java,v 1.3 2004-08-29 22:24:25 grlea Exp $
+// $Id: ImageTilesHelper.java,v 1.4 2004-09-04 07:59:17 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,15 +16,14 @@ package org.grlea.imageTiles;
 // limitations under the License.
 
 import java.awt.Component;
-import java.awt.Rectangle;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
 /**
- * <p></p>
+ * <p>Methods to help in the set up of an Image Tiles TileSpace and Pipeline.</p>
  *
  * @author grlea
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class
 ImageTilesHelper
@@ -45,10 +44,10 @@ ImageTilesHelper
    public static int
    chooseAppropriateGapSize(int tileSize)
    {
-      if (tileSize < 16)
+      if (tileSize < 32)
          return 0;
 
-      if (tileSize < 64)
+      if (tileSize < 96)
          return 1;
 
       return 2;

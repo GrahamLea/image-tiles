@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: BackgroundPainter.java,v 1.1 2004-08-27 01:09:41 grlea Exp $
+// $Id: BackgroundPainter.java,v 1.2 2004-09-04 07:59:16 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +18,10 @@ package org.grlea.imageTiles;
 import java.awt.Graphics2D;
 
 /**
- * <p></p>
+ * <p>Paints the background over which an animated tile set is drawn.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface
 BackgroundPainter

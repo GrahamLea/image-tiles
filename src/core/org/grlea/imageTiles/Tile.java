@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: Tile.java,v 1.1 2004-08-23 22:47:38 grlea Exp $
+// $Id: Tile.java,v 1.2 2004-09-04 07:59:19 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,22 +18,24 @@ package org.grlea.imageTiles;
 
 
 /**
- * <p></p>
+ * <p>One Tile in a TileSpace. The tile is merely a record of the position of a single tile
+ * within the tile space. The position is recorded both as a row/column pair and as the x/y offset
+ * from the top-left corner of the tile space.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 Tile
 implements Comparable
 {
-   private final int column;
+   public final int column;
 
-   private final int row;
+   public final int row;
 
-   private final int x;
+   public final int x;
 
-   private final int y;
+   public final int y;
 
    public
    Tile(int column, int row, int x, int y)
@@ -42,30 +44,6 @@ implements Comparable
       this.row = row;
       this.x = x;
       this.y = y;
-   }
-
-   public int
-   getColumn()
-   {
-      return column;
-   }
-
-   public int
-   getRow()
-   {
-      return row;
-   }
-
-   public int
-   getX()
-   {
-      return x;
-   }
-
-   public int
-   getY()
-   {
-      return y;
    }
 
    public int

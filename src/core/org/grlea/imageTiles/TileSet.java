@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: TileSet.java,v 1.1 2004-08-23 22:47:38 grlea Exp $
+// $Id: TileSet.java,v 1.2 2004-09-04 07:59:20 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,33 +19,36 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * <p></p>
+ * <p>A set of {@link TileImage}s, created <i>from</i> a source image, <i>for</i> a TileSpace and
+ * <i>by</i> a TileRenderer.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 TileSet
 {
    private final TileSpace tileSpace;
 
-   private final BufferedImage image;
-
-   private final Point imagePosition;
+   private final BufferedImage sourceImage;
 
    private final TileRenderer renderer;
 
+   private final Map tileImages;
+
    // TODO (grahaml) Add "paintEmptyTiles" parameter ?
-   // TODO (grahaml) Remove imagePosition in place of a Placer.
    public
-   TileSet(TileSpace tileSpace, BufferedImage image, Point imagePosition, TileRenderer renderer)
+   TileSet(TileSpace tileSpace, BufferedImage sourceImage, TileRenderer renderer)
    {
       this.tileSpace = tileSpace;
-      this.image = image;
-      this.imagePosition = imagePosition;
+      this.sourceImage = sourceImage;
       this.renderer = renderer;
+      float loadFactor = 0.9F;
+      tileImages = new HashMap((int) (tileSpace.getTileCount() / loadFactor), loadFactor);
    }
 
    public TileSpace
@@ -68,16 +71,28 @@ TileSet
       return new Point(0, 0);
    }
 
+   /**
+    * Paints into the given graphics object the portion of the source image that belongs on the
+    * given tile.
+    *
+    * @param tile
+    * @param graphics
+    */
    public void
    paintTileImage(Tile tile, Graphics2D graphics)
    {
-      graphics.drawImage(image, imagePosition.x - tile.getX(), imagePosition.y - tile.getY(), null);
+      graphics.drawImage(sourceImage, -tile.x, -tile.y, null);
    }
 
-   public RenderedTile
-   render(Tile tile)
+   public TileImage
+   get(Tile tile)
    {
-      // TODO (grahaml) Cache rendered tiles in here?
-      return renderer.render(this, tile);
+      TileImage tileImage = (TileImage) tileImages.get(tile);
+      if (tileImage == null)
+      {
+         tileImage = renderer.render(this, tile);
+         tileImages.put(tile, tileImage);
+      }
+      return tileImage;
    }
 }

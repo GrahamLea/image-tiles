@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.background;
 
-// $Id: TransparentBackgroundPainter.java,v 1.1 2004-08-27 01:09:42 grlea Exp $
+// $Id: TransparentBackgroundPainter.java,v 1.2 2004-09-04 07:59:22 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,10 +21,10 @@ import org.grlea.imageTiles.TileSpace;
 import java.awt.Graphics2D;
 
 /**
- * <p></p>
+ * <p>Clears the background to the graphics object's background (usually 100% transparent).</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 TransparentBackgroundPainter

@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.render;
 
-// $Id: PlainTileRenderer.java,v 1.1 2004-08-23 22:47:42 grlea Exp $
+// $Id: PlainTileRenderer.java,v 1.2 2004-09-04 07:59:29 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,18 +15,19 @@ package org.grlea.imageTiles.render;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import org.grlea.imageTiles.RenderedTile;
+import org.grlea.imageTiles.TileImage;
 import org.grlea.imageTiles.Tile;
 import org.grlea.imageTiles.TileRenderer;
 import org.grlea.imageTiles.TileSet;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**
- * <p></p>
+ * <p>Renders Tiles as just their section of the source image.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 PlainTileRenderer
@@ -36,12 +37,14 @@ implements TileRenderer
    PlainTileRenderer()
    {}
 
-   public RenderedTile
+   public TileImage
    render(TileSet tileSet, Tile tile)
    {
       int tileSize = tileSet.getTileSpace().getTileSize();
       BufferedImage image = new BufferedImage(tileSize, tileSize, BufferedImage.TYPE_INT_ARGB);
-      tileSet.paintTileImage(tile, image.createGraphics());
-      return new RenderedTile(tile, image);
+      Graphics2D graphics = image.createGraphics();
+      tileSet.paintTileImage(tile, graphics);
+      graphics.dispose();
+      return new TileImage(tile, image);
    }
 }

@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.choose;
 
-// $Id: RandomChooser.java,v 1.2 2004-08-27 01:15:33 grlea Exp $
+// $Id: RandomChooser.java,v 1.3 2004-09-04 07:59:23 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,10 +23,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- * <p></p>
+ * <p>Chooses tiles from a TileSpace randomly.</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class 
 RandomChooser
@@ -42,7 +42,7 @@ implements Chooser
    RandomChooser(TileSpace tileSpace)
    {
       this.tileSpace = tileSpace;
-      tiles = new ArrayList(tileSpace.getColumns() * tileSpace.getRows());
+      tiles = new ArrayList(tileSpace.getTileCount());
       reset();
    }
 

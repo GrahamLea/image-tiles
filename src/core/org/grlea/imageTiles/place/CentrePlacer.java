@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.place;
 
-// $Id: CentrePlacer.java,v 1.1 2004-08-23 22:47:41 grlea Exp $
+// $Id: CentrePlacer.java,v 1.2 2004-09-04 07:59:28 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,14 +19,15 @@ import org.grlea.imageTiles.Placer;
 import org.grlea.imageTiles.TileSpace;
 
 import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**
- * <p></p>
+ * <p>Places images in the centre of a TileSpace. Note that no scaling is performed, so if the image
+ * is larger than the TileSpace, the edges of the Image will be lost.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 CentrePlacer
@@ -34,15 +35,14 @@ implements Placer
 {
    public
    CentrePlacer()
-   {
-   }
+   {}
 
-   public Point
-   choosePosition(BufferedImage image, TileSpace tileSpace)
+   public void
+   place(TileSpace tileSpace, BufferedImage sourceImage, Graphics2D targetGraphics)
    {
       Dimension size = tileSpace.getSize();
-      int x = (size.width - image.getWidth()) / 2;
-      int y = (size.height - image.getHeight()) / 2;
-      return new Point(x, y);
+      int x = (size.width - sourceImage.getWidth()) / 2;
+      int y = (size.height - sourceImage.getHeight()) / 2;
+      targetGraphics.drawImage(sourceImage, x, y, null);
    }
 }

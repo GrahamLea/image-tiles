@@ -4,7 +4,7 @@ import org.grlea.imageTiles.Chooser;
 import org.grlea.imageTiles.Tile;
 import org.grlea.imageTiles.TileSpace;
 
-// $Id: SequentialChooser.java,v 1.2 2004-08-27 01:15:33 grlea Exp $
+// $Id: SequentialChooser.java,v 1.3 2004-09-04 07:59:23 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,10 +22,11 @@ import org.grlea.imageTiles.TileSpace;
 
 
 /**
- * <p></p>
+ * <p>Chooses Tiles sequentially from the TileSpace, either horizontally or vertically as
+ * specified.</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class 
 SequentialChooser
@@ -33,19 +34,31 @@ implements Chooser
 {
    private final TileSpace tileSpace;
 
+   private final boolean horizontalFirst;
+
    private int row = 0;
    private int column = 0;
 
+   /**
+    * Creates a new <code>SequentialChooser</code>.
+    *
+    * @param tileSpace the tile space the chooser is choosing from.
+    *
+    * @param horizontalFirst <code>true</code> to traverse the tilespace horizontally first (i.e.
+    * choose from one row at a time), <code>false</code> to traverse vertically first (i.e. choose
+    * from one column at a time).
+    */
    public
-   SequentialChooser(TileSpace tileSpace)
+   SequentialChooser(TileSpace tileSpace, boolean horizontalFirst)
    {
       this.tileSpace = tileSpace;
+      this.horizontalFirst = horizontalFirst;
    }
 
    public boolean
    hasMoreTiles()
    {
-      return !(row >= tileSpace.getRows());
+      return horizontalFirst ? !(row >= tileSpace.getRows()) : !(column >= tileSpace.getColumns());
    }
 
    public Tile
@@ -57,11 +70,23 @@ implements Chooser
       }
       finally
       {
-         column++;
-         if (column == tileSpace.getColumns())
+         if (horizontalFirst)
          {
-            column = 0;
+            column++;
+            if (column == tileSpace.getColumns())
+            {
+               column = 0;
+               row++;
+            }
+         }
+         else
+         {
             row++;
+            if (row == tileSpace.getRows())
+            {
+               row = 0;
+               column++;
+            }
          }
       }
    }

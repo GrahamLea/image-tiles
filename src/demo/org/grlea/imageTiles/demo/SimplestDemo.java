@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.demo;
 
-// $Id: SimplestDemo.java,v 1.1 2004-08-29 22:22:09 grlea Exp $
+// $Id: SimplestDemo.java,v 1.2 2004-09-04 07:59:36 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,12 +15,11 @@ package org.grlea.imageTiles.demo;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import org.grlea.imageTiles.pipeline.Pipeline;
 import org.grlea.imageTiles.swing.AnimatedTileCanvas;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
@@ -30,20 +29,31 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 /**
- * <p></p>
+ * <p>An application demonstrating the simplest possible use of Image Tiles. The application
+ * displays one image in an {@link AnimatedTileCanvas}.</p>
+ *
+ * <p>The only line of Image Tiles code in this class is:<pre>
+ * AnimatedTileCanvas tileCanvas = new AnimatedTileCanvas(new Pipeline(image), true);
+ * </pre></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class 
 SimplestDemo
 {
    private static final String USAGE =
-      "usage: <jvm> " + SimplestDemo.class.getName() + " <imageResourceName>";
+      "usage: <jvm> " + SimplestDemo.class.getName() + " [imageResourceName]";
+
+   private static final String DEFAULT_IMAGE = "images/George.jpg";
 
    public static void
    main(String[] argv)
    {
+      // Use default image if none specified.
+      if (argv.length == 0)
+         argv = new String[] {DEFAULT_IMAGE};
+
       // Parse arguments.
       if (argv.length != 1)
          usage();
@@ -67,7 +77,7 @@ SimplestDemo
       if (image == null)
          usage("Failed to read image.");
 
-      final AnimatedTileCanvas tileCanvas = new AnimatedTileCanvas(image);
+      AnimatedTileCanvas tileCanvas = new AnimatedTileCanvas(new Pipeline(image), true);
 
       final JFrame frame = new JFrame("Image Tiles : SimplestAnimationDemo");
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -76,15 +86,6 @@ SimplestDemo
       Container contentPane = frame.getContentPane();
       contentPane.setLayout(new BorderLayout());
       contentPane.add(tileCanvas, BorderLayout.CENTER);
-
-      frame.addWindowListener(new WindowAdapter()
-      {
-         public void
-         windowOpened(WindowEvent e)
-         {
-            tileCanvas.start();
-         }
-      });
 
       SwingUtilities.invokeLater(new Runnable()
       {
@@ -96,6 +97,19 @@ SimplestDemo
             frame.setVisible(true);
          }
       });
+
+//      while (true)
+//      {
+//         try
+//         {
+//            int availableVideoMemory =
+//               frame.getGraphicsConfiguration().getDevice().getAvailableAcceleratedMemory() / 1024;
+//            System.out.println("availableVideoMemory = " + availableVideoMemory);
+//            Thread.sleep(5000);
+//         }
+//         catch (InterruptedException ie)
+//         {}
+//      }
    }
 
    private static void

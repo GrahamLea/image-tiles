@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.render;
 
-// $Id: BevelEdgeDecorator.java,v 1.2 2004-08-27 01:15:00 grlea Exp $
+// $Id: BevelEdgeDecorator.java,v 1.3 2004-09-04 07:59:28 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,10 +26,10 @@ import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 
 /**
- * <p></p>
+ * <p>A decorator that makes a tile appear to have a small bevelled edge.</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class
 BevelEdgeDecorator

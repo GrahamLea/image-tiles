@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: Placer.java,v 1.1 2004-08-23 22:47:37 grlea Exp $
+// $Id: Placer.java,v 1.2 2004-09-04 07:59:18 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,18 +15,19 @@ package org.grlea.imageTiles;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import java.awt.Point;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**
- * <p></p>
+ * <p>Places an image within a tile space. A placer may perform many operations on the image as it
+ * "places" it, including scaling, rotating and colour manipulation.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface
 Placer
 {
-   Point
-   choosePosition(BufferedImage image, TileSpace tileSpace);
+   void
+   place(TileSpace tileSpace, BufferedImage sourceImage, Graphics2D targetGraphics);
 }

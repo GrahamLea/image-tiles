@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: Chooser.java,v 1.2 2004-08-27 01:15:33 grlea Exp $
+// $Id: Chooser.java,v 1.3 2004-09-04 07:59:16 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +18,10 @@ package org.grlea.imageTiles;
 
 
 /**
- * <p></p>
+ * <p>Chooses which Tile(s) should be the next to be animated onto the screen by a Transition.</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public interface
 Chooser

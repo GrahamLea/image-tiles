@@ -1,1 +1,1 @@
-Manifest-Version: 1.0Class-Path: imageTiles-swing.jarMain-Class: org.grlea.imageTiles.demo.SimpleDemo
+Manifest-Version: 1.0Class-Path: imageTiles-swing.jarMain-Class: org.grlea.imageTiles.demo.SimplestDemo

@@ -1,6 +1,6 @@
 package org.grlea.imageTiles;
 
-// $Id: TileSpace.java,v 1.2 2004-08-27 01:18:30 grlea Exp $
+// $Id: TileSpace.java,v 1.3 2004-09-04 07:59:20 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,17 +15,17 @@ package org.grlea.imageTiles;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
 
 /**
- * <p></p>
+ * <p>Defines an array of tiles called a tile space. The space is defined by a tile size, a gap
+ * between each pair of tiles, a number of rows and a number of columns. The tiles in the space
+ * can be retrieved through the {@link #getTile} method.</p>
  *
  * @author grlea
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class
 TileSpace
@@ -77,6 +77,12 @@ TileSpace
       return tileSize;
    }
 
+   public int
+   getGapSize()
+   {
+      return gapSize;
+   }
+
    public Tile
    getTile(int row, int column)
    {
@@ -113,6 +119,17 @@ TileSpace
       return rows;
    }
 
+   public int
+   getTileCount()
+   {
+      return rows * columns;
+   }
+
+   /**
+    * Adds all the tiles in this <code>TileSpace</code> to the given Collection.
+    *
+    * @param collection a collection to place {@link Tile}s in.
+    */
    public void
    getAllTiles(Collection collection)
    {
@@ -123,5 +140,31 @@ TileSpace
             collection.add(tiles[row][column]);
          }
       }
+   }
+
+   /**
+    * Creates and returns a new {@link BufferedImage} image that is the same size as this
+    * <code>TileSpace</code>, with type {@link BufferedImage#TYPE_INT_ARGB}.
+    *
+    * @return a new BufferedImage
+    */
+   public BufferedImage
+   createImage()
+   {
+      return createImage(BufferedImage.TYPE_INT_ARGB);
+   }
+
+   /**
+    * Creates and returns a new {@link BufferedImage} image that is the same size as this
+    * <code>TileSpace</code>.
+    *
+    * @param type the type for the BufferedImage (see {@link BufferedImage}<code>.TYPE_*</code>
+    *
+    * @return a new BufferedImage
+    */
+   public BufferedImage
+   createImage(int type)
+   {
+      return new BufferedImage(width, height, type);
    }
 }

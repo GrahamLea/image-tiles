@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.render;
 
-// $Id: DecorativeTileRenderer.java,v 1.1 2004-08-23 22:47:42 grlea Exp $
+// $Id: DecorativeTileRenderer.java,v 1.2 2004-09-04 07:59:29 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,7 @@ package org.grlea.imageTiles.render;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import org.grlea.imageTiles.RenderedTile;
+import org.grlea.imageTiles.TileImage;
 import org.grlea.imageTiles.Tile;
 import org.grlea.imageTiles.TileRenderer;
 import org.grlea.imageTiles.TileSet;
@@ -25,10 +25,11 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 /**
- * <p></p>
+ * <p>A Renderer that allows multiple {@link Decorator}s to decorate the source image of the
+ * Tile.</p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 DecorativeTileRenderer
@@ -54,7 +55,7 @@ implements TileRenderer
       this.tileDecorators = tileDecorators;
    }
 
-   public RenderedTile
+   public TileImage
    render(TileSet tileSet, Tile tile)
    {
       int tileSize = tileSet.getTileSpace().getTileSize();
@@ -65,12 +66,13 @@ implements TileRenderer
       graphics.fillRect(0, 0, tileSize, tileSize);
 
       tileSet.paintTileImage(tile, graphics);
+      graphics.dispose();
 
       for (int i = 0; i < tileDecorators.length; i++)
       {
          tileDecorators[i].decorate(image);
       }
 
-      return new RenderedTile(tile, image);
+      return new TileImage(tile, image);
    }
 }

@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.demo;
 
-// $Id: SimpleDemo.java,v 1.1 2004-08-29 22:22:00 grlea Exp $
+// $Id: SimpleDemo.java,v 1.2 2004-09-04 07:59:36 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,73 +15,179 @@ package org.grlea.imageTiles.demo;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import org.grlea.graphics.ImageFileFilter;
+import org.grlea.imageTiles.ImageTilesDefaults;
 import org.grlea.imageTiles.ImageTilesHelper;
 import org.grlea.imageTiles.TileRenderer;
 import org.grlea.imageTiles.TileSpace;
-import org.grlea.imageTiles.animate.SlideAnimator;
-import org.grlea.imageTiles.pipeline.ImageSource;
-import org.grlea.imageTiles.pipeline.imageSource.SingleImageSource;
+import org.grlea.imageTiles.Transition;
+import org.grlea.imageTiles.imageSource.DirectoryImageSource;
+import org.grlea.imageTiles.imageSource.SingleImageSource;
+import org.grlea.imageTiles.ImageSource;
+import org.grlea.imageTiles.pipeline.Pipeline;
+import org.grlea.imageTiles.pipeline.PipelineComponents;
 import org.grlea.imageTiles.render.BevelEdgeDecorator;
 import org.grlea.imageTiles.render.DecorativeTileRenderer;
 import org.grlea.imageTiles.render.Decorator;
 import org.grlea.imageTiles.render.GlareDecorator;
 import org.grlea.imageTiles.render.RoundedCornerDecorator;
 import org.grlea.imageTiles.swing.AnimatedTileCanvas;
+import org.grlea.imageTiles.transition.SlideTransition;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 /**
- * <p></p>
+ * <p>A small application demonstrating the use of a few simple Image Tiles components to create an
+ * animated slideshow. The application uses an {@link AnimatedTileCanvas} to display either one
+ * image or a directory of images. The size of the tiles, the gap between them, the number of
+ * animated tiles and the frame rate of the pipeline can all (optionally) be specified on the
+ * command line. When they are not, the demo uses Image Tiles classes to choose appropriate
+ * defaults.</p>
+ *
+ * <p>This class demonstrates the use of:
+ * <ul>
+ * <li>{@link ImageTilesHelper}</li>
+ * <li>{@link ImageTilesDefaults}</li>
+ * <li>{@link SingleImageSource}</li>
+ * <li>{@link DirectoryImageSource}</li>
+ * <li>{@link DecorativeTileRenderer}</li>
+ * <li>{@link SlideTransition}</li>
+ * <li>{@link PipelineComponents}</li>
+ * <li>{@link Pipeline}</li>
+ * <li>{@link AnimatedTileCanvas}</li>
+ * </ul></p>
+ *
+ * <p>Some of the Image Tiles code in this class demonstrates:<br><br>
+ * 
+ * Creating an {@link ImageSource}:<pre>
+      if (!imageFile.isDirectory())
+         imageSource = new SingleImageSource(imageFile);
+      else
+         imageSource = new DirectoryImageSource(imageFile, new ImageFileFilter(), true);
+ * </pre>
+ * Choosing a Tile size:<pre>
+      int tileSize = ImageTilesHelper.chooseAppropriateTileSize(image);
+      int gapSize = ImageTilesHelper.chooseAppropriateGapSize(tileSize);
+ * </pre>
+ * Creating a TileSpace:<pre>
+      if (!imageFile.isDirectory())
+         tileSpace = ImageTilesHelper.createTileSpace(image, tileSize, gapSize);
+      else
+         tileSpace = ImageTilesHelper.createTileSpace(spaceDimension, tileSize, gapSize);
+ * </pre>
+ * Creating a DecorativeTileRenderer:<pre>
+      Decorator[] tileDecorators = {
+         new BevelEdgeDecorator(tileSpace),
+         new RoundedCornerDecorator(tileSpace),
+         new GlareDecorator(tileSpace),
+      };
+      TileRenderer tileRenderer = new DecorativeTileRenderer(tileDecorators);
+ * </pre>
+ * Creating a Pipeline and an AnimatedTileCanvas:<pre>
+      Transition transition = new SlideTransition(animatedTiles, tileSize / 3);
+      PipelineComponents components =
+         new PipelineComponents(tileSpace, imageSource, tileRenderer, transition);
+      Pipeline pipeline = new Pipeline(components);
+      AnimatedTileCanvas tileCanvas = new AnimatedTileCanvas(pipeline, true);
+ * </pre></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
-public class 
+public class
 SimpleDemo
 {
    private static final String USAGE =
       "usage: <jvm> " + SimpleDemo.class.getName() +
-      " <imageResourceName> [tileSize] [gapSize] [animatedTiles] [frameRate]";
-
-   private static final int DEFAULT_FRAME_RATE = 50;
+      " <imageFile>|<imageDirectory> [tileSize] [gapSize] [animatedTiles] [frameRate]";
 
    public static void
    main(String[] argv)
    {
+      final JFrame frame = new JFrame("Image Tiles : SimpleDemo");
+      Rectangle screenBounds = frame.getGraphicsConfiguration().getBounds();
+
       // Parse arguments.
       if (argv.length < 1 || argv.length > 5)
          usage();
 
       // Argument 1: Image
-      String imageResourceName = argv[0];
-      URL imageUrl = SimpleDemo.class.getClassLoader().getResource(imageResourceName);
-      if (imageUrl == null)
-         usage("Image '" + imageResourceName + "' not found.");
+      String imageFilename = argv[0];
+      File imageFile = new File(imageFilename);
+      if (!imageFile.exists())
+         usage("File '" + imageFilename + "' not found.");
 
+      boolean singleImage = !imageFile.isDirectory();
+
+      ImageSource imageSource;
       BufferedImage image = null;
-      try
+      if (singleImage)
       {
-         image = ImageIO.read(imageUrl);
+         try
+         {
+            image = ImageIO.read(imageFile);
+            if (image == null)
+               throw new IOException("Failed to load image.");
+
+            if (image.getWidth() > screenBounds.width ||
+                image.getHeight() > screenBounds.getHeight())
+            {
+               // Scale the image down if it's bigger than the screen
+               float scaleDownRatioX = (float) screenBounds.width / image.getWidth();
+               float scaleDownRatioY = (float) screenBounds.height / image.getHeight();
+               float scaleDownRatio = Math.min(scaleDownRatioX, scaleDownRatioY) * 0.8F;
+               int newWidth = (int) (image.getWidth() * scaleDownRatio);
+               int newHeight = (int) (image.getHeight() * scaleDownRatio);
+               BufferedImage newImage = new BufferedImage(newWidth, newHeight, image.getType());
+               Graphics2D newGraphics = newImage.createGraphics();
+               newGraphics.scale(scaleDownRatio, scaleDownRatio);
+               newGraphics.drawImage(image, 0, 0, null);
+               newGraphics.dispose();
+               image = newImage;
+            }
+
+            imageSource = new SingleImageSource(image);
+         }
+         catch (IOException e)
+         {
+            usage("Error reading image: " + e);
+            throw new IllegalStateException("Failed to exit.");
+         }
       }
-      catch (IOException e)
+      else
       {
-         usage("Error reading image: " + e);
+         try
+         {
+            imageSource = new DirectoryImageSource(imageFile, new ImageFileFilter(), true);
+         }
+         catch (IOException e)
+         {
+            usage("Error reading images: " + e);
+            throw new IllegalStateException("Failed to exit.");
+         }
       }
-      if (image == null)
-         usage("Failed to read image.");
 
       // Arguments 2, 3, 4: tileSize, animatedFrames, frameRate
-      int tileSize = ImageTilesHelper.chooseAppropriateTileSize(image);
+      int tileSize;
+      if (singleImage)
+      {
+         tileSize = ImageTilesHelper.chooseAppropriateTileSize(image);
+      }
+      else
+      {
+         tileSize = screenBounds.width / 32;
+      }
 
       if (argv.length > 1)
       {
@@ -113,9 +219,19 @@ SimpleDemo
          }
       }
 
-      TileSpace tileSpace = ImageTilesHelper.createTileSpace(image, tileSize, gapSize);
+      TileSpace tileSpace;
+      if (singleImage)
+      {
+         tileSpace = ImageTilesHelper.createTileSpace(image, tileSize, gapSize);
+      }
+      else
+      {
+         int spaceSize = (int) ((screenBounds.height + screenBounds.height) / 2 * 0.8F);
+         Dimension spaceDimension = new Dimension(spaceSize, spaceSize);
+         tileSpace = ImageTilesHelper.createTileSpace(spaceDimension, tileSize, gapSize);
+      }
 
-      int animatedTiles = (int) (Math.sqrt(tileSpace.getRows() * tileSpace.getColumns()) / 2);
+      int animatedTiles = (int) (Math.sqrt(tileSpace.getRows() * tileSpace.getColumns()));
 
       if (argv.length > 3)
       {
@@ -131,7 +247,7 @@ SimpleDemo
          }
       }
 
-      int frameRate = DEFAULT_FRAME_RATE;
+      int frameRate = ImageTilesDefaults.DEFAULT_FRAME_RATE;
 
      if (argv.length > 4)
       {
@@ -147,8 +263,6 @@ SimpleDemo
          }
       }
 
-      ImageSource imageSource = new SingleImageSource(image);
-
       Decorator[] tileDecorators = {
          new BevelEdgeDecorator(tileSpace),
          new RoundedCornerDecorator(tileSpace),
@@ -156,28 +270,21 @@ SimpleDemo
       };
       TileRenderer tileRenderer = new DecorativeTileRenderer(tileDecorators);
 
-      int animationSpeed = tileSize / 4;
-      SlideAnimator animator = new SlideAnimator(tileSpace, animatedTiles, animationSpeed);
+      Transition transition = new SlideTransition(animatedTiles, tileSize / 3);
 
-      final AnimatedTileCanvas tileCanvas =
-         new AnimatedTileCanvas(tileSpace, imageSource, tileRenderer, animator);
+      PipelineComponents components =
+         new PipelineComponents(tileSpace, imageSource, tileRenderer, transition);
+      Pipeline pipeline = new Pipeline(components);
+      AnimatedTileCanvas tileCanvas = new AnimatedTileCanvas(pipeline, true);
 
-      final JFrame frame = new JFrame("Image Tiles : SimpleDemo");
+//      pipeline.addFrameListener(new FrameRateListener());
+
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       frame.setResizable(false);
 
       Container contentPane = frame.getContentPane();
       contentPane.setLayout(new BorderLayout());
       contentPane.add(tileCanvas, BorderLayout.CENTER);
-
-      frame.addWindowListener(new WindowAdapter()
-      {
-         public void
-         windowOpened(WindowEvent e)
-         {
-            tileCanvas.start();
-         }
-      });
 
       SwingUtilities.invokeLater(new Runnable()
       {

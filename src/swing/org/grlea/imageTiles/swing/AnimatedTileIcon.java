@@ -1,6 +1,6 @@
 package org.grlea.imageTiles.swing;
 
-// $Id: AnimatedTileIcon.java,v 1.1 2004-08-27 01:19:47 grlea Exp $
+// $Id: AnimatedTileIcon.java,v 1.2 2004-09-04 07:59:37 grlea Exp $
 // Copyright (c) 2004 Graham Lea. All rights reserved.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,161 +15,122 @@ package org.grlea.imageTiles.swing;
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import org.grlea.imageTiles.AnimationController;
-import org.grlea.imageTiles.AnimationKitListener;
-import org.grlea.imageTiles.AnimationRenderKit;
-import org.grlea.imageTiles.Animator;
-import org.grlea.imageTiles.BackgroundPainter;
-import org.grlea.imageTiles.pipeline.ImageSource;
-import org.grlea.imageTiles.Painter;
-import org.grlea.imageTiles.pipeline.Pipeline;
-import org.grlea.imageTiles.pipeline.PipelineImageChanger;
-import org.grlea.imageTiles.pipeline.PipelineListener;
-import org.grlea.imageTiles.pipeline.PipelineTicker;
-import org.grlea.imageTiles.Placer;
-import org.grlea.imageTiles.SchedulerPausingAnimationKitListener;
-import org.grlea.imageTiles.TileRenderer;
+import org.grlea.imageTiles.ImageTilesHelper;
 import org.grlea.imageTiles.TileSpace;
-import org.grlea.imageTiles.RenderKit;
-import org.grlea.imageTiles.AnimationKit;
-import org.grlea.imageTiles.animate.SlideAnimator;
-import org.grlea.imageTiles.background.ColourBackgroundPainter;
-import org.grlea.imageTiles.background.TransparentBackgroundPainter;
-import org.grlea.imageTiles.choose.RandomChooser;
-import org.grlea.imageTiles.paint.StaticPainter;
-import org.grlea.imageTiles.place.CentrePlacer;
-import org.grlea.util.FixedRateScheduler;
+import org.grlea.imageTiles.ImageSource;
+import org.grlea.imageTiles.pipeline.Pipeline;
+import org.grlea.imageTiles.pipeline.PipelineComponents;
+import org.grlea.imageTiles.imageSource.SingleImageSource;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Insets;
 import java.awt.Component;
-import java.awt.Color;
-import java.awt.event.HierarchyEvent;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.HierarchyListener;
-import java.awt.image.VolatileImage;
+import java.awt.event.HierarchyEvent;
+import java.awt.image.BufferedImage;
 
-import javax.swing.JComponent;
 import javax.swing.Icon;
 
 /**
- * <p></p>
+ * <p>An {@link Icon} that renders the contents of an Image Tiles Pipeline.
+ * <code>AnimatedTileIcon</code> uses a {@link ComponentPipelineRenderer} in conjunction with a
+ * {@link ComponentRepaintPipelineListener}.</p>
+ *
+ * <p><code>AnimatedTileIcon</code> differs from {@link AnimatedTileCanvas} and
+ * {@link AnimatedTileComponent} in that it is only the icon for a component, not the component
+ * itself. This has the advantage that the component will handle any translations required as a
+ * result of layout or borders, and the icon will always be rendered in the correct position,
+ * whereas with the other two this is not the case. This makes <code>AnimatedTileIcon</code> ideal
+ * for embedding Image Tile Pipelines within full-blown GUIs.</p>
+ *
+ * <p>Usage:<pre>
+ *    Pipeline pipeline = ...;
+ *    JLabel label = new JLabel();
+ *    AnimatedTileIcon icon = new AnimatedTileIcon(label, pipeline, true);
+ *    label.setIcon(icon);
+ *
+ *    Container container = ...;
+ *    container.add(label);
+ *    container.setVisible(true);
+ * </pre></p>
+ *
+ * <p>Note that a single <code>AnimatedTileIcon</code> MAY be rendered to more than one component,
+ * however to do so a hook needs to be created to force each subsequent component to repaint itself
+ * once each frame. This is done using the following code:<pre>
+ *    JLabel label2 = new JLabel(icon);
+ *    pipeline.addFrameListener(new {@link ComponentRepaintPipelineListener}(label2));
+ * </pre></p>
  *
  * @author grlea
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class
 AnimatedTileIcon
 implements Icon
 {
-   private static final int DEFAULT_FRAME_RATE = 50;
+   private final Pipeline pipeline;
 
-   private final TileSpace tileSpace;
+   private final ComponentPipelineRenderer renderer;
 
-   private final FixedRateScheduler scheduler;
-
-   private Pipeline pipeline;
-
-   private VolatileImage buffer = null;
-
+   /**
+    * Creates a new <code>AnimatedTileIcon</code> that will render the given pipeline to the given
+    * component.
+    *
+    * @param pipeline the image tiles pipeline to render
+    *
+    * @param autoStart <code>true</code> if the pipeline should be automatically started when the
+    * component is first shown, <code>false</code> if starting of the pipline will be performed
+    * manually (i.e. outside this class).
+    */
    public
-   AnimatedTileIcon(Component component, TileSpace tileSpace, ImageSource imageSource, TileRenderer renderer)
+   AnimatedTileIcon(final Component component, final Pipeline pipeline, boolean autoStart)
    {
-      this(component, tileSpace, imageSource, renderer, new SlideAnimator(tileSpace));
-   }
-
-   public
-   AnimatedTileIcon(Component component, TileSpace tileSpace, ImageSource imageSource, TileRenderer renderer,
-                           Animator animator)
-   {
-      this(component, tileSpace, imageSource, renderer, animator, DEFAULT_FRAME_RATE);
-   }
-
-   public
-   AnimatedTileIcon(Component component, TileSpace tileSpace, ImageSource imageSource, TileRenderer renderer,
-                           Animator animator, int frameRate)
-   {
-      this.tileSpace = tileSpace;
-      BackgroundPainter backgroundPainter = new TransparentBackgroundPainter(tileSpace);
-      Painter painter = new StaticPainter(tileSpace);
-      Placer placer = new CentrePlacer();
-      RandomChooser chooser = new RandomChooser(tileSpace);
-
-      AnimationKit animationController = new AnimationController(chooser, animator, painter);
-      RenderKit renderKit = new AnimationRenderKit(backgroundPainter, animator, painter);
-      RepaintComponentPipelineListener pipelineListener = new RepaintComponentPipelineListener(component);
-      Pipeline pipeline = new Pipeline(tileSpace, imageSource, placer, renderer, animationController,
-                                       renderKit, new PipelineListener[] {pipelineListener});
+      if (pipeline == null)
+         throw new IllegalArgumentException("pipeline cannot be null.");
       this.pipeline = pipeline;
+      pipeline.addFrameListener(new ComponentRepaintPipelineListener(component));
+      this.renderer = new ComponentPipelineRenderer();
 
-      PipelineTicker pipelineTicker = new PipelineTicker(pipeline);
-      scheduler = new FixedRateScheduler(pipelineTicker, frameRate);
-
-      AnimationKitListener schedulerPauser = new SchedulerPausingAnimationKitListener(scheduler);
-      animationController.addListener(schedulerPauser);
-
-      AnimationKitListener imageAdvancer = new PipelineImageChanger(pipeline);
-      animationController.addListener(imageAdvancer);
+      if (autoStart)
+      {
+         component.addHierarchyListener(new HierarchyListener()
+         {
+            public void
+            hierarchyChanged(HierarchyEvent e)
+            {
+               if (component.isShowing())
+               {
+                  pipeline.start();
+                  component.removeHierarchyListener(this);
+               }
+            }
+         });
+      }
    }
 
-   public void
-   start()
+   public Pipeline
+   getPipeline()
    {
-      scheduler.start();
-   }
-
-   public void
-   stop()
-   {
-      scheduler.stop();
-   }
-
-   public Dimension
-   getPreferredSize()
-   {
-      return tileSpace.getSize();
+      return pipeline;
    }
 
    public int
    getIconWidth()
    {
-      return tileSpace.getWidth();
+      return pipeline.getComponents().getTileSpace().getWidth();
    }
 
    public int
    getIconHeight()
    {
-      return tileSpace.getHeight();
+      return pipeline.getComponents().getTileSpace().getHeight();
    }
 
    public void
    paintIcon(Component component, Graphics graphics, int x, int y)
    {
-      if (buffer == null)
-         createBuffer(component);
-
-      do
-      {
-         // VolatileImage handling code courtesy of the legendary Chet Haase
-         int validateCode = buffer.validate(component.getGraphicsConfiguration());
-         if (validateCode == VolatileImage.IMAGE_INCOMPATIBLE)
-            createBuffer(component);
-
-         pipeline.render(buffer.createGraphics());
-
-         graphics.drawImage(buffer, 0, 0, null);
-      }
-      while (buffer.contentsLost());
-   }
-
-   private void
-   createBuffer(Component component)
-   {
-      if (buffer != null)
-      {
-         buffer.flush();
-         buffer = null;
-      }
-      buffer = component.createVolatileImage(tileSpace.getWidth(), tileSpace.getHeight());
+      graphics.translate(x, y);
+      renderer.render(pipeline, component, (Graphics2D) graphics);
+      graphics.translate(-x, -y);
    }
 }
