@@ -2,26 +2,29 @@
 
 <jnlp spec="1.0+"
       codebase="https://image-tiles.dev.java.net/"
-      href="imageTiles-simplestDemo.jnlp">
+      href="imageTiles-insideApplicationDemo.jnlp">
 
   <information>
 
-    <title>Image Tiles - SimplestDemo</title>
+    <title>Image Tiles - InsideApplicationDemo</title>
     <vendor>Graham Lea</vendor>
     <homepage href="https://image-tiles.dev.java.net/" />
-    <description>Demonstrates the simplest possible use of Image Tiles.</description>
+    <description>Demonstrates how Image Tiles components can be embedded into a Swing application.</description>
 <!--    <icon href="functionButtonBlue64.gif" width="64" height="64" />-->
     <offline-allowed />
   </information>
 
   <resources>
      <j2se version="1.4+"/>
-     <jar href="release/imageTiles-simpleDemo.jar"/>
+     <jar href="release/imageTiles-inApplicationDemo.jar"/>
      <jar href="release/imageTiles-swing.jar"/>
      <jar href="release/imageTiles-core.jar"/>
+     <jar href="lib/elcore.jar.jar"/>
+     <jar href="lib/explicit-tablelayout-0.1.16.jar"/>
+     <jar href="lib/plastic-1.2.1.jar"/>
   </resources>
 
-  <application-desc main-class="org.grlea.imageTiles.demo.SimplestDemo"/>
+  <application-desc main-class="org.grlea.imageTiles.demo.InsideApplicationDemo"/>
 
 </jnlp>
 
