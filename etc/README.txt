@@ -1,11 +1,9 @@
 
                                  Image Tiles
 
-                               Version 0.1 alpha
+                                 Version @VERSION@
 
-AUTHOR
-
-Image Tiles is written by Graham Lea (grlea@dev.java.net).
+                        http://image-tiles.dev.java.net/
 
 USAGE
 
