@@ -1,3 +1,0 @@
-Image Tiles
-Version @VERSION@
-http://image-tiles.dev.java.net/

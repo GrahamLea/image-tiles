@@ -1,1 +1,0 @@
-Manifest-Version: 1.0Class-Path: imageTiles-swing.jar lib/elcore.jar lib/explicit-tablelayout-0.1.9.jar lib/plastic-1.2.1.jarMain-Class: org.grlea.imageTiles.demo.InsideApplicationDemo
